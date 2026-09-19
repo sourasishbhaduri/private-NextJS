@@ -30,15 +30,30 @@ export function detectMidnightWallets(): DetectedWallet[] {
     for (const key of Object.keys(window.midnight)) {
       const provider = window.midnight[key];
       if (provider && typeof provider.enable === 'function') {
+        let name = provider.name || key;
+        if (key === 'mnLace' || key === 'lace') name = 'Midnight Lace Wallet';
+        if (key === '1am') name = '1AM Midnight Wallet';
+        
         wallets.push({
           id: key,
-          name: provider.name || (key === 'mnLace' || key === 'lace' ? 'Midnight Lace Wallet' : key),
+          name,
           icon: provider.icon,
           apiVersion: provider.apiVersion,
           provider,
         });
       }
     }
+  }
+
+  // Fallback check for 1AM Wallet if not iterated
+  if (!wallets.some((w) => w.id === '1am') && window.midnight?.['1am']) {
+    wallets.push({
+      id: '1am',
+      name: '1AM Midnight Wallet',
+      icon: window.midnight['1am'].icon,
+      apiVersion: window.midnight['1am'].apiVersion,
+      provider: window.midnight['1am'],
+    });
   }
 
   // Fallback check for Lace if window.midnight.mnLace exists directly
@@ -83,10 +98,16 @@ export async function connectLaceWallet(walletId?: string): Promise<{
 }> {
   const wallets = detectMidnightWallets();
   
-  let targetWallet = walletId ? wallets.find((w) => w.id === walletId) : wallets[0];
+  let targetWallet = walletId ? wallets.find((w) => w.id === walletId) : (wallets.find(w => w.id === '1am') || wallets.find(w => w.id === 'mnLace') || wallets[0]);
   
   if (!targetWallet) {
-    if (window.midnight?.mnLace) {
+    if (window.midnight?.['1am']) {
+      targetWallet = {
+        id: '1am',
+        name: '1AM Midnight Wallet',
+        provider: window.midnight['1am'],
+      };
+    } else if (window.midnight?.mnLace) {
       targetWallet = {
         id: 'mnLace',
         name: 'Midnight Lace Wallet',
@@ -94,7 +115,7 @@ export async function connectLaceWallet(walletId?: string): Promise<{
       };
     } else {
       throw new Error(
-        'No supported Midnight Wallet extension (like Lace or 1AM) was found. Please install a compatible wallet and refresh the page.'
+        'No supported Midnight Wallet extension (like 1AM or Lace) was found. Please install a compatible wallet and refresh the page.'
       );
     }
   }
