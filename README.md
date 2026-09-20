@@ -80,12 +80,12 @@ The Registry leverages Midnight's dual-state architecture where private witness 
 | **Commitment Hash** | 🌐 Public | Midnight Ledger | One-way cryptographic fingerprint (`0x...`) |
 | **Verifier Portal** | 🌐 Public | Midnight Ledger | Accessible by authorized hospital staff |
 
-## 🔗 Deployed Contracts — Midnight Preprod
+## 🔗 Deployed Contracts — Midnight Preview
 
 | Parameter | Value | Explorer Link |
 |-----------|-------|---------------|
-| **Active Contract (Latest)** | `0x1e3a57110a038d73d0d8e23777ced0e087e75d3f9185add9c967d26daf28cab3` | [🔍 View on Preprod Explorer](https://explorer.preprod.midnight.network/?search=0x1e3a57110a038d73d0d8e23777ced0e087e75d3f9185add9c967d26daf28cab3) |
-| **Deployer Wallet** | `mn_addr_preprod1qlzf6h6zjhyms2p3y4vu5p278zqkqqaqk9nualrndghgxywseres5hth5u` | [Preprod Faucet](https://midnight-tmnight-preprod.nethermind.dev/) |
+| **Active Contract (Latest)** | `d4c225763323dd67b5b35b6921df29cc0059b81b29cc6825562e2f69cbe4f942` | [🔍 View on Preview Explorer](https://explorer.preview.midnight.network/?search=d4c225763323dd67b5b35b6921df29cc0059b81b29cc6825562e2f69cbe4f942) |
+| **Deployer Wallet** | `mn_addr_preview16fakwryq54tqphp8u2g3c3dam3mavk560yhryu57s5v0vnguz93qzegnrs` | [Preview Faucet](https://midnight-tmnight-preview.nethermind.dev/) |
 
 ## 🔄 CI/CD Pipeline & Automated Quality Gates
 

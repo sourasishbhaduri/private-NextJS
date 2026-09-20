@@ -85,7 +85,12 @@ export const PublicLedgerState: React.FC<PublicLedgerStateProps> = ({ data, onRe
             </span>
             Active & Indexed
           </div>
-          <div className="text-sm font-medium text-slate-400 mt-4">
+          {process.env.NEXT_PUBLIC_CONTRACT_ADDRESS && (
+            <div className="text-xs font-mono text-slate-500 mt-2 truncate bg-white p-2 rounded border border-slate-200" title={process.env.NEXT_PUBLIC_CONTRACT_ADDRESS}>
+              {process.env.NEXT_PUBLIC_CONTRACT_ADDRESS}
+            </div>
+          )}
+          <div className="text-sm font-medium text-slate-400 mt-2">
             {data.lastUpdated ? `Last Sync: ${data.lastUpdated.toLocaleTimeString()}` : 'Connected to Midnight'}
           </div>
         </div>

@@ -29,7 +29,7 @@ export function detectMidnightWallets(): DetectedWallet[] {
   if (window.midnight) {
     for (const key of Object.keys(window.midnight)) {
       const provider = window.midnight[key];
-      if (provider && typeof provider.enable === 'function') {
+      if (provider && (typeof provider.enable === 'function' || typeof provider.connect === 'function')) {
         let name = provider.name || key;
         if (key === 'mnLace' || key === 'lace') name = 'Midnight Lace Wallet';
         if (key === '1am') name = '1AM Midnight Wallet';
@@ -121,7 +121,25 @@ export async function connectLaceWallet(walletId?: string): Promise<{
   }
 
   // Request wallet connection permission (triggers Lace extension modal)
-  const walletAPI = await targetWallet.provider.enable();
+  let walletAPI;
+  if (typeof targetWallet.provider.connect === 'function') {
+    // Note: Some newer wallets require a network identifier like 'preprod', 'testnet' or 'preview'.
+    try {
+      walletAPI = await targetWallet.provider.connect('preview');
+    } catch (err: any) {
+      console.warn("Failed to connect with 'preview' network argument. Trying without arguments...", err);
+      try {
+        walletAPI = await targetWallet.provider.connect();
+      } catch (fallbackErr) {
+        throw err; // Throw the original connection error (e.g., 'Request connection failed')
+      }
+    }
+  } else if (typeof targetWallet.provider.enable === 'function') {
+    walletAPI = await targetWallet.provider.enable();
+  } else {
+    const keys = targetWallet.provider ? Object.keys(targetWallet.provider).join(', ') : 'null';
+    throw new Error(`Wallet API is missing (no .enable or .connect). Available keys on provider: ${keys}`);
+  }
 
   let address = '';
   let tNightBalance = BigInt("10000000000"); // Default initial balance representation
@@ -129,10 +147,15 @@ export async function connectLaceWallet(walletId?: string): Promise<{
 
   // Try extracting state or addresses from the connected wallet API
   try {
-    if (walletAPI.state && typeof walletAPI.state.subscribe === 'function') {
+    let stateObservable = walletAPI.state;
+    if (typeof walletAPI.state === 'function') {
+      stateObservable = walletAPI.state();
+    }
+
+    if (stateObservable && typeof stateObservable.subscribe === 'function') {
       // Observable state
       await new Promise<void>((resolve) => {
-        const sub = walletAPI.state.subscribe({
+        const sub = stateObservable.subscribe({
           next: (state: any) => {
             if (state?.shielded?.address) {
               address = state.shielded.address;
@@ -150,19 +173,31 @@ export async function connectLaceWallet(walletId?: string): Promise<{
           error: () => resolve(),
         });
         setTimeout(() => {
-          sub.unsubscribe?.();
+          if (sub && typeof sub.unsubscribe === 'function') sub.unsubscribe();
           resolve();
         }, 1000);
       });
-    } else if (typeof walletAPI.getShieldedAddresses === 'function') {
+    }
+    
+    // Fallback checks for address if state subscription failed or didn't return address
+    if (!address && typeof walletAPI.getShieldedAddresses === 'function') {
       const addresses = await walletAPI.getShieldedAddresses();
       if (addresses && addresses[0]) address = addresses[0];
-    } else if (typeof walletAPI.getUnshieldedAddresses === 'function') {
+    }
+    if (!address && typeof walletAPI.getUnshieldedAddresses === 'function') {
       const addresses = await walletAPI.getUnshieldedAddresses();
       if (addresses && addresses[0]) address = addresses[0];
     }
+    if (!address && typeof walletAPI.getAddresses === 'function') {
+      const addresses = await walletAPI.getAddresses();
+      if (addresses && addresses[0]) address = addresses[0];
+    }
+    if (!address && typeof walletAPI.getUsedAddresses === 'function') {
+      const addresses = await walletAPI.getUsedAddresses();
+      if (addresses && addresses[0]) address = addresses[0];
+    }
   } catch (e) {
-    console.warn('Could not query full state from Lace wallet API:', e);
+    console.warn('Could not query full state from wallet API:', e);
   }
 
   // Fallback format if address is not directly returned by the extension state call
