@@ -12,7 +12,7 @@ const nextConfig: NextConfig = {
   // Required for Midnight SDK packages that use Node.js built-ins in browser context
   webpack: (config, { isServer }) => {
     config.watchOptions = {
-      ignored: ['**/node_modules', '**/.git', /(^|[\/\\])\../],
+      ignored: ['**/node_modules', '**/.git'],
     };
     if (!isServer) {
       config.resolve.fallback = {
