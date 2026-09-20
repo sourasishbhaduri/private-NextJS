@@ -5,7 +5,7 @@ Enterprise Zero-Knowledge Organ Donor Registration & Eligibility Verification bu
 <p align="center">
   <a href="https://private-organ-donor-registry-next-j.vercel.app/"><img src="https://img.shields.io/badge/Live-Demo-blue?style=for-the-badge&logo=vercel" alt="Live Demo" /></a>
   <a href="https://www.youtube.com/watch?v=ce5IJDyWQX0"><img src="https://img.shields.io/badge/Demo-Video-red?style=for-the-badge&logo=youtube" alt="Demo Video" /></a>
-  <a href="https://explorer.preprod.midnight.network/?search=0x1e3a57110a038d73d0d8e23777ced0e087e75d3f9185add9c967d26daf28cab3"><img src="https://img.shields.io/badge/Midnight-Preprod_Contract-black?style=for-the-badge" alt="Midnight Preprod Contract" /></a>
+  <a href="https://explorer.preview.midnight.network/?search=d4c225763323dd67b5b35b6921df29cc0059b81b29cc6825562e2f69cbe4f942"><img src="https://img.shields.io/badge/Midnight-Preview_Contract-black?style=for-the-badge" alt="Midnight Preview Contract" /></a>
   <a href="https://github.com/sourasishbhaduri/private-organ-donor-registry-NextJs/actions"><img src="https://img.shields.io/badge/CI/CD-passing-success?style=for-the-badge&logo=githubactions" alt="CI/CD" /></a>
   <img src="https://img.shields.io/badge/License-MIT-green?style=for-the-badge" alt="License" />
 </p>
@@ -14,7 +14,7 @@ Enterprise Zero-Knowledge Organ Donor Registration & Eligibility Verification bu
 
 | Screen | Description |
 |--------|-------------|
-| **Landing page** | **Overview & Landing Page**: Hero section showcasing mathematical privacy, connected Midnight wallet (`mn_addr...`), live Preprod network badge, and interactive zero-knowledge gateway.<br><br>![Landing page](./assets/landing.png) |
+| **Landing page** | **Overview & Landing Page**: Hero section showcasing mathematical privacy, connected Midnight wallet (`mn_addr...`), live Preview network badge, and interactive zero-knowledge gateway.<br><br>![Landing page](./assets/landing.png) |
 | **Ledger Tally** | **Public Ledger Dashboard**: Real-time registry telemetry, sub-second ZK prover latency, live block height ticker, and on-chain commitment stream for aggregate blood supply metrics.<br><br>![Ledger Tally](./assets/ledger-tally.png) |
 | **Public ledger** | **Zero-Knowledge Donor Registration**: Private witness execution, client-side medical clearance evaluation, and interactive WASM prover activity terminal.<br><br>![Public ledger](./assets/public_ledger.png) |
 
@@ -55,7 +55,7 @@ The Registry leverages Midnight's dual-state architecture where private witness 
                           │
                           ▼ (Network Boundary: ZERO PII Transmitted)
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│                         MIDNIGHT PREPROD LEDGER                             │
+│                         MIDNIGHT PREVIEW LEDGER                             │
 │                                                                             │
 │  PUBLIC ON-CHAIN STATE:                                                     │
 │  ✅ totalDonors         — Aggregate counter incremented (+1)                │
@@ -133,8 +133,8 @@ curl -I http://localhost:6300
 
 ### 4. Fund Testnet Wallet
 Get testnet `tDUST` / `tNIGHT` tokens from the official Nethermind Faucet:
-- **Faucet URL**: [https://midnight-tmnight-preprod.nethermind.dev/](https://midnight-tmnight-preprod.nethermind.dev/)
-- **Target Address**: `mn_addr_preprod1qlzf6h6zjhyms2p3y4vu5p278zqkqqaqk9nualrndghgxywseres5hth5u`
+- **Faucet URL**: [https://midnight-tmnight-preview.nethermind.dev/](https://midnight-tmnight-preview.nethermind.dev/)
+- **Target Address**: `mn_addr_preview16fakwryq54tqphp8u2g3c3dam3mavk560yhryu57s5v0vnguz93qzegnrs`
 
 ### 5. Launch the Web Application
 ```bash
@@ -148,7 +148,7 @@ Open [http://localhost:3000](http://localhost:3000)
 2. The platform automatically scans `window.midnight` using the official `@midnight-ntwrk/dapp-connector-api` specification.
 3. Select your detected wallet (1AM Wallet or Midnight Lace) and approve the authorization prompt.
 
-### 7. Deploying Contracts to Midnight Preprod
+### 7. Deploying Contracts to Midnight Preview
 ```bash
 npm run compile
 # Deployment via Midnight CLI workflow

@@ -123,7 +123,7 @@ export async function connectLaceWallet(walletId?: string): Promise<{
   // Request wallet connection permission (triggers Lace extension modal)
   let walletAPI;
   if (typeof targetWallet.provider.connect === 'function') {
-    // Note: Some newer wallets require a network identifier like 'preprod', 'testnet' or 'preview'.
+    // Note: Some newer wallets require a network identifier like 'testnet' or 'preview'.
     try {
       walletAPI = await targetWallet.provider.connect('preview');
     } catch (err: any) {

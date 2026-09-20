@@ -4,34 +4,14 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { ArrowLeft, Shield, Eye, EyeOff } from 'lucide-react';
 import { Navbar } from '../../components/Navbar';
-import { WalletModal } from '../../components/WalletModal';
 import { WalletState } from '../../types';
 
 export default function PrivacyPage() {
-  const [isWalletModalOpen, setIsWalletModalOpen] = useState(false);
-  const [wallet, setWallet] = useState<WalletState>({
-    connected: false,
-    address: null,
-    walletName: null,
-    tNightBalance: null,
-    dustBalance: null,
-    network: 'preprod',
-    error: null,
-  });
-
+    
   return (
     <div className="app-container">
-      <Navbar
-        wallet={wallet}
-        onConnect={() => setIsWalletModalOpen(true)}
-        onDisconnect={() => setWallet({ ...wallet, connected: false, address: null, tNightBalance: null, dustBalance: null })}
-        onNetworkChange={(network) => setWallet({ ...wallet, network })}
-      />
-      <WalletModal
-        isOpen={isWalletModalOpen}
-        onClose={() => setIsWalletModalOpen(false)}
-        onWalletConnected={(state) => setWallet({ ...wallet, ...state })}
-      />
+      <Navbar />
+      
 
       <main className="main-content" style={{ padding: '40px 20px', maxWidth: '900px', margin: '0 auto' }}>
         <Link href="/" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', color: 'var(--text-secondary)', textDecoration: 'none', marginBottom: '24px', fontWeight: 500 }}>
@@ -71,21 +51,21 @@ export default function PrivacyPage() {
             </div>
 
             {/* Public Data */}
-            <div style={{ padding: '30px', background: 'rgba(16,185,129,0.05)', borderRadius: '16px', border: '1px solid rgba(16,185,129,0.2)' }}>
+            <div style={{ padding: '30px', background: 'rgba(249, 115, 22,0.05)', borderRadius: '16px', border: '1px solid rgba(249, 115, 22,0.2)' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '20px' }}>
-                <div style={{ background: '#10b981', color: 'white', padding: '8px', borderRadius: '10px' }}>
+                <div style={{ background: '#f97316', color: 'white', padding: '8px', borderRadius: '10px' }}>
                   <Eye size={24} />
                 </div>
-                <h2 style={{ fontSize: '1.3rem', fontWeight: 700, color: '#059669' }}>Public Ledger</h2>
+                <h2 style={{ fontSize: '1.3rem', fontWeight: 700, color: '#ea580c' }}>Public Ledger</h2>
               </div>
               <p style={{ color: 'var(--text-secondary)', marginBottom: '16px', lineHeight: 1.6 }}>
                 The following information is recorded on the public Midnight blockchain using the <code style={{ background: 'rgba(0,0,0,0.05)', padding: '2px 6px', borderRadius: '4px' }}>disclose()</code> function for transparency.
               </p>
               <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                <li style={{ display: 'flex', gap: '8px' }}><span style={{ color: '#059669' }}>✓</span> Anonymous Cryptographic Commitment</li>
-                <li style={{ display: 'flex', gap: '8px' }}><span style={{ color: '#059669' }}>✓</span> Total Number of Registered Donors</li>
-                <li style={{ display: 'flex', gap: '8px' }}><span style={{ color: '#059669' }}>✓</span> Aggregated Blood Supply Counts (Anonymized)</li>
-                <li style={{ display: 'flex', gap: '8px' }}><span style={{ color: '#059669' }}>✓</span> Binary Consent Status Result (during verification)</li>
+                <li style={{ display: 'flex', gap: '8px' }}><span style={{ color: '#ea580c' }}>✓</span> Anonymous Cryptographic Commitment</li>
+                <li style={{ display: 'flex', gap: '8px' }}><span style={{ color: '#ea580c' }}>✓</span> Total Number of Registered Donors</li>
+                <li style={{ display: 'flex', gap: '8px' }}><span style={{ color: '#ea580c' }}>✓</span> Aggregated Blood Supply Counts (Anonymized)</li>
+                <li style={{ display: 'flex', gap: '8px' }}><span style={{ color: '#ea580c' }}>✓</span> Binary Consent Status Result (during verification)</li>
               </ul>
             </div>
 

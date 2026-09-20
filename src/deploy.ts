@@ -1,5 +1,5 @@
 /**
- * Deploy private-organ-donor-registry contract to a Midnight network (undeployed by default; use --network preview|preprod for public networks).
+ * Deploy private-organ-donor-registry contract to a Midnight network (undeployed by default; use --network preview for public networks).
  */
 import * as fs from 'node:fs';
 import * as path from 'node:path';

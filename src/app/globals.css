@@ -11,10 +11,10 @@
   --border-strong: #d1d5db;
   --border-focus: #0ea5e9;
   
-  --primary: #0ea5e9;
-  --primary-hover: #0284c7;
-  --primary-subtle: #f0f9ff;
-  --primary-ring: rgba(14, 165, 233, 0.15);
+  --primary: #f97316;
+  --primary-hover: #ea580c;
+  --primary-subtle: #fff7ed;
+  --primary-ring: rgba(249, 115, 22, 0.15);
   
   --secondary: #6366f1;
   --secondary-subtle: #eef2ff;
@@ -86,19 +86,19 @@ body {
   align-items: center;
   justify-content: center;
   gap: 8px;
-  box-shadow: 0 4px 12px rgba(14, 165, 233, 0.25);
+  box-shadow: 0 4px 12px rgba(249, 115, 22, 0.25);
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .btn-saas-primary:hover {
   transform: translateY(-1px);
-  box-shadow: 0 6px 16px rgba(14, 165, 233, 0.35);
+  box-shadow: 0 6px 16px rgba(249, 115, 22, 0.35);
   opacity: 0.95;
 }
 
 .btn-saas-primary:active {
   transform: translateY(1px);
-  box-shadow: 0 2px 8px rgba(14, 165, 233, 0.2);
+  box-shadow: 0 2px 8px rgba(249, 115, 22, 0.2);
 }
 
 .btn-saas-primary:disabled {

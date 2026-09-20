@@ -1,28 +1,18 @@
 "use client";
 
 import React, { useState } from 'react';
+import { useWallet } from '../../contexts/WalletContext';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 import { Navbar } from '../../components/Navbar';
-import { WalletModal } from '../../components/WalletModal';
 import { DonorRegistrationForm } from '../../components/DonorRegistrationForm';
 import { WalletState } from '../../types';
 import { registerDonorOnChain } from '../../utils/contractInteraction';
 
 export default function RegisterPage() {
-  const [isWalletModalOpen, setIsWalletModalOpen] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [wallet, setWallet] = useState<WalletState>({
-    connected: false,
-    address: null,
-    walletName: null,
-    tNightBalance: null,
-    dustBalance: null,
-    network: 'preprod',
-    error: null,
-    api: null,
-  });
-
+  const { wallet, setIsWalletModalOpen } = useWallet();
+    const [isSubmitting, setIsSubmitting] = useState(false);
+  
   return (
     <div className="app-container">
       <Navbar
@@ -31,11 +21,7 @@ export default function RegisterPage() {
         onDisconnect={() => setWallet({ ...wallet, connected: false, address: null, tNightBalance: null, dustBalance: null, api: null })}
         onNetworkChange={(network) => setWallet({ ...wallet, network })}
       />
-      <WalletModal
-        isOpen={isWalletModalOpen}
-        onClose={() => setIsWalletModalOpen(false)}
-        onWalletConnected={(state) => setWallet({ ...wallet, ...state })}
-      />
+      
 
       <main className="main-content" style={{ padding: '40px 20px', maxWidth: '800px', margin: '0 auto' }}>
         <Link href="/" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', color: 'var(--text-secondary)', textDecoration: 'none', marginBottom: '24px', fontWeight: 500 }}>

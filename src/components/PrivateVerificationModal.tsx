@@ -118,20 +118,20 @@ export const PrivateVerificationModal: React.FC<PrivateVerificationModalProps> =
             marginTop: '20px',
             padding: '16px',
             borderRadius: '12px',
-            background: verificationOutput.eligible ? 'rgba(16, 185, 129, 0.1)' : 'rgba(244, 63, 94, 0.1)',
-            border: `1px solid ${verificationOutput.eligible ? 'rgba(16, 185, 129, 0.3)' : 'rgba(244, 63, 94, 0.3)'}`,
+            background: verificationOutput.eligible ? 'rgba(249, 115, 22, 0.1)' : 'rgba(244, 63, 94, 0.1)',
+            border: `1px solid ${verificationOutput.eligible ? 'rgba(249, 115, 22, 0.3)' : 'rgba(244, 63, 94, 0.3)'}`,
             display: 'flex',
             alignItems: 'center',
             gap: '12px',
           }}
         >
           {verificationOutput.eligible ? (
-            <CheckCircle2 size={24} color="#10b981" />
+            <CheckCircle2 size={24} color="#f97316" />
           ) : (
             <XCircle size={24} color="#f43f5e" />
           )}
           <div>
-            <h4 style={{ color: verificationOutput.eligible ? '#34d399' : '#fb7185', fontWeight: 600, fontSize: '0.95rem' }}>
+            <h4 style={{ color: verificationOutput.eligible ? '#fb923c' : '#fb7185', fontWeight: 600, fontSize: '0.95rem' }}>
               {verificationOutput.eligible ? 'ZK Verification Succeeded! Eligible & Registered' : 'ZK Verification Failed / Not Found'}
             </h4>
             <p className="font-mono" style={{ fontSize: '0.78rem', color: 'var(--text-secondary)', marginTop: '2px' }}>

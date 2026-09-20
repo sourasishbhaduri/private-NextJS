@@ -4,35 +4,15 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { ArrowLeft, Activity, Heart, Shield } from 'lucide-react';
 import { Navbar } from '../../components/Navbar';
-import { WalletModal } from '../../components/WalletModal';
 import { PublicLedgerState } from '../../components/PublicLedgerState';
 import { WalletState } from '../../types';
 
 export default function RecordsPage() {
-  const [isWalletModalOpen, setIsWalletModalOpen] = useState(false);
-  const [wallet, setWallet] = useState<WalletState>({
-    connected: false,
-    address: null,
-    walletName: null,
-    tNightBalance: null,
-    dustBalance: null,
-    network: 'preprod',
-    error: null,
-  });
-
+    
   return (
     <div className="min-h-screen flex flex-col bg-slate-50 selection:bg-blue-500 selection:text-white">
-      <Navbar
-        wallet={wallet}
-        onConnect={() => setIsWalletModalOpen(true)}
-        onDisconnect={() => setWallet({ ...wallet, connected: false, address: null, tNightBalance: null, dustBalance: null })}
-        onNetworkChange={(network) => setWallet({ ...wallet, network })}
-      />
-      <WalletModal
-        isOpen={isWalletModalOpen}
-        onClose={() => setIsWalletModalOpen(false)}
-        onWalletConnected={(state) => setWallet({ ...wallet, ...state })}
-      />
+      <Navbar />
+      
 
       <main className="flex-1 w-full max-w-6xl mx-auto px-4 py-8 lg:py-12 flex flex-col md:flex-row gap-8">
         

@@ -4,35 +4,15 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Shield, Activity, Lock, ArrowRight, Server, FileCheck, CheckCircle, Cpu } from 'lucide-react';
 import { Navbar } from '../components/Navbar';
-import { WalletModal } from '../components/WalletModal';
 import { PrivacyModelBanner } from '../components/PrivacyModelBanner';
 import { WalletState } from '../types';
 
 export default function LandingPage() {
-  const [isWalletModalOpen, setIsWalletModalOpen] = useState(false);
-  const [wallet, setWallet] = useState<WalletState>({
-    connected: false,
-    address: null,
-    walletName: null,
-    tNightBalance: null,
-    dustBalance: null,
-    network: 'preprod',
-    error: null,
-  });
-
+    
   return (
     <div className="app-container">
-      <Navbar
-        wallet={wallet}
-        onConnect={() => setIsWalletModalOpen(true)}
-        onDisconnect={() => setWallet({ ...wallet, connected: false, address: null, tNightBalance: null, dustBalance: null })}
-        onNetworkChange={(network) => setWallet({ ...wallet, network })}
-      />
-      <WalletModal
-        isOpen={isWalletModalOpen}
-        onClose={() => setIsWalletModalOpen(false)}
-        onWalletConnected={(state) => setWallet({ ...wallet, ...state })}
-      />
+      <Navbar />
+      
 
       <main className="main-content" style={{ padding: '0' }}>
         {/* Hero Section */}
@@ -45,11 +25,11 @@ export default function LandingPage() {
           overflow: 'hidden'
         }}>
           {/* Background Decorative elements */}
-          <div style={{ position: 'absolute', top: '-150px', right: '-10%', width: '500px', height: '500px', background: 'radial-gradient(circle, rgba(16,185,129,0.05) 0%, rgba(255,255,255,0) 70%)', borderRadius: '50%', zIndex: 0 }} />
+          <div style={{ position: 'absolute', top: '-150px', right: '-10%', width: '500px', height: '500px', background: 'radial-gradient(circle, rgba(249, 115, 22,0.05) 0%, rgba(255,255,255,0) 70%)', borderRadius: '50%', zIndex: 0 }} />
           <div style={{ position: 'absolute', bottom: '-150px', left: '-10%', width: '500px', height: '500px', background: 'radial-gradient(circle, rgba(14,165,233,0.05) 0%, rgba(255,255,255,0) 70%)', borderRadius: '50%', zIndex: 0 }} />
 
           <div style={{ maxWidth: '800px', margin: '0 auto', position: 'relative', zIndex: 1 }}>
-            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: 'rgba(16,185,129,0.1)', color: 'var(--primary)', padding: '6px 16px', borderRadius: '30px', fontSize: '0.85rem', fontWeight: 600, marginBottom: '24px' }}>
+            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: 'rgba(249, 115, 22,0.1)', color: 'var(--primary)', padding: '6px 16px', borderRadius: '30px', fontSize: '0.85rem', fontWeight: 600, marginBottom: '24px' }}>
               <Shield size={14} /> Powered by Midnight Zero-Knowledge Technology
             </div>
             
@@ -95,8 +75,8 @@ export default function LandingPage() {
                 <ArrowRight size={32} style={{ margin: '0 auto' }} />
               </div>
 
-              <div className="saas-card" style={{ padding: '30px 20px', borderColor: 'var(--primary)', boxShadow: '0 10px 30px -10px rgba(16,185,129,0.15)' }}>
-                <div style={{ background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)', color: '#fff', width: '50px', height: '50px', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px', boxShadow: '0 4px 12px rgba(16,185,129,0.3)' }}>
+              <div className="saas-card" style={{ padding: '30px 20px', borderColor: 'var(--primary)', boxShadow: '0 10px 30px -10px rgba(249, 115, 22,0.15)' }}>
+                <div style={{ background: 'linear-gradient(135deg, #f97316 0%, #ea580c 100%)', color: '#fff', width: '50px', height: '50px', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px', boxShadow: '0 4px 12px rgba(249, 115, 22,0.3)' }}>
                   <Cpu size={24} />
                 </div>
                 <h3 style={{ fontSize: '1.1rem', fontWeight: 600, marginBottom: '10px' }}>ZK Proof</h3>

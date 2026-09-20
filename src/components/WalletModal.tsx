@@ -4,20 +4,19 @@ import React, { useState, useEffect } from 'react';
 import { X, Wallet, ShieldCheck, Download, Key, AlertTriangle, Cpu, CheckCircle2 } from 'lucide-react';
 import { detectMidnightWallets, connectLaceWallet, connectSeedWallet, DetectedWallet } from '../utils/midnightWallet';
 import { WalletState } from '../types';
+import { useWallet } from '../contexts/WalletContext';
 
-interface WalletModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  onWalletConnected: (state: Partial<WalletState>) => void;
-}
-
-export const WalletModal: React.FC<WalletModalProps> = ({ isOpen, onClose, onWalletConnected }) => {
+export const WalletModal: React.FC = () => {
+  const { wallet, setWallet, isWalletModalOpen, setIsWalletModalOpen } = useWallet();
   const [detectedWallets, setDetectedWallets] = useState<DetectedWallet[]>([]);
   const [isConnecting, setIsConnecting] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   
   const [activeTab, setActiveTab] = useState<'lace' | 'seed'>('lace');
   const [seedInput, setSeedInput] = useState('');
+
+  const isOpen = isWalletModalOpen;
+  const onClose = () => setIsWalletModalOpen(false);
 
   useEffect(() => {
     if (isOpen) {
@@ -34,7 +33,8 @@ export const WalletModal: React.FC<WalletModalProps> = ({ isOpen, onClose, onWal
     setErrorMessage(null);
     try {
       const res = await connectLaceWallet(walletId);
-      onWalletConnected({
+      setWallet({
+        ...wallet,
         connected: true,
         address: res.address,
         walletName: res.walletName,
@@ -47,7 +47,11 @@ export const WalletModal: React.FC<WalletModalProps> = ({ isOpen, onClose, onWal
       onClose();
     } catch (err: any) {
       // Intentionally suppressing console.error to prevent Next.js 15 Dev Overlay from intercepting expected wallet connection errors
-      setErrorMessage(err.message || 'Failed to connect to Lace Wallet.');
+      if (err.message && err.message.includes('enable is not a function')) {
+         setErrorMessage("Wallet provider does not have an enable() function. It might be incompatible or structured differently.");
+      } else {
+         setErrorMessage(err.message || 'Failed to connect to Wallet.');
+      }
     } finally {
       setIsConnecting(false);
     }
@@ -61,7 +65,8 @@ export const WalletModal: React.FC<WalletModalProps> = ({ isOpen, onClose, onWal
     setErrorMessage(null);
     try {
       const res = await connectSeedWallet(seedInput.trim());
-      onWalletConnected({
+      setWallet({
+        ...wallet,
         connected: true,
         address: res.address,
         walletName: 'Devnet Seed Wallet',
@@ -126,7 +131,7 @@ export const WalletModal: React.FC<WalletModalProps> = ({ isOpen, onClose, onWal
 
         {/* Modal Header */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '20px' }}>
-          <div style={{ background: 'rgba(16, 185, 129, 0.15)', padding: '12px', borderRadius: '12px', color: '#10b981' }}>
+          <div style={{ background: 'rgba(249, 115, 22, 0.15)', padding: '12px', borderRadius: '12px', color: '#f97316' }}>
             <Wallet size={24} />
           </div>
           <div>
@@ -147,8 +152,8 @@ export const WalletModal: React.FC<WalletModalProps> = ({ isOpen, onClose, onWal
               padding: '10px',
               borderRadius: '8px',
               border: 'none',
-              background: activeTab === 'lace' ? 'var(--primary-glow, rgba(16, 185, 129, 0.2))' : 'transparent',
-              color: activeTab === 'lace' ? '#34d399' : 'var(--text-secondary)',
+              background: activeTab === 'lace' ? 'var(--primary-glow, rgba(249, 115, 22, 0.2))' : 'transparent',
+              color: activeTab === 'lace' ? '#fb923c' : 'var(--text-secondary)',
               fontWeight: 600,
               cursor: 'pointer',
               fontSize: '0.85rem',
@@ -168,8 +173,8 @@ export const WalletModal: React.FC<WalletModalProps> = ({ isOpen, onClose, onWal
               padding: '10px',
               borderRadius: '8px',
               border: 'none',
-              background: activeTab === 'seed' ? 'var(--primary-glow, rgba(16, 185, 129, 0.2))' : 'transparent',
-              color: activeTab === 'seed' ? '#34d399' : 'var(--text-secondary)',
+              background: activeTab === 'seed' ? 'var(--primary-glow, rgba(249, 115, 22, 0.2))' : 'transparent',
+              color: activeTab === 'seed' ? '#fb923c' : 'var(--text-secondary)',
               fontWeight: 600,
               cursor: 'pointer',
               fontSize: '0.85rem',
@@ -221,25 +226,25 @@ export const WalletModal: React.FC<WalletModalProps> = ({ isOpen, onClose, onWal
                       justifyContent: 'space-between',
                       padding: '16px 20px',
                       cursor: 'pointer',
-                      border: '1px solid rgba(16, 185, 129, 0.3)',
+                      border: '1px solid rgba(249, 115, 22, 0.3)',
                       transition: 'all 0.2s ease',
                       width: '100%',
-                      background: 'rgba(16, 185, 129, 0.05)',
+                      background: 'rgba(249, 115, 22, 0.05)',
                     }}
                   >
                     <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                      <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: 'rgba(16, 185, 129, 0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                        <Wallet size={20} color="#10b981" />
+                      <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: 'rgba(249, 115, 22, 0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        <Wallet size={20} color="#f97316" />
                       </div>
                       <div style={{ textAlign: 'left' }}>
                         <h4 style={{ fontWeight: 600, fontSize: '0.95rem' }}>{wallet.name}</h4>
-                        <span style={{ fontSize: '0.75rem', color: '#34d399' }}>● Extension Installed & Ready</span>
+                        <span style={{ fontSize: '0.75rem', color: '#fb923c' }}>● Extension Installed & Ready</span>
                       </div>
                     </div>
                     {isConnecting ? (
-                      <Cpu size={20} className="animate-spin" color="#10b981" />
+                      <Cpu size={20} className="animate-spin" color="#f97316" />
                     ) : (
-                      <CheckCircle2 size={20} color="#10b981" />
+                      <CheckCircle2 size={20} color="#f97316" />
                     )}
                   </button>
                 ))}
@@ -285,7 +290,7 @@ export const WalletModal: React.FC<WalletModalProps> = ({ isOpen, onClose, onWal
           <form onSubmit={handleConnectSeed} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
             <div className="form-group">
               <label className="form-label" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <Key size={14} color="#10b981" /> Seed Phrase / Key Passphrase
+                <Key size={14} color="#f97316" /> Seed Phrase / Key Passphrase
               </label>
               <input
                 type="password"

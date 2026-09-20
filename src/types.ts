@@ -1,4 +1,4 @@
-export type NetworkId = 'undeployed' | 'preprod' | 'preview';
+export type NetworkId = 'undeployed' | 'preview';
 
 export interface WalletState {
   connected: boolean;

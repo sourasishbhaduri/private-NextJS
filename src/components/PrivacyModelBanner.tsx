@@ -39,8 +39,8 @@ export const PrivacyModelBanner: React.FC = () => {
         </div>
 
         {/* Deliberate Disclosures */}
-        <div className="saas-card" style={{ borderLeft: '4px solid #10b981' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#34d399', fontWeight: 600, marginBottom: '8px', fontSize: '0.9rem' }}>
+        <div className="saas-card" style={{ borderLeft: '4px solid #f97316' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#fb923c', fontWeight: 600, marginBottom: '8px', fontSize: '0.9rem' }}>
             <CheckCircle size={16} /> Deliberate ZK Disclosures
           </div>
           <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '6px', fontSize: '0.82rem', color: 'var(--text-secondary)' }}>

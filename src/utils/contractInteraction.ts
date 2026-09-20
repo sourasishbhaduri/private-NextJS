@@ -3,15 +3,15 @@
 /**
  * Midnight Contract Interaction Utilities
  * Connects to the organ-donor-registry Compact contract via the DApp connector
- * and submits real ZK proof transactions to Midnight Preprod.
+ * and submits real ZK proof transactions to Midnight Preview.
  */
 
 import type { DonorFormData, RegistrationResult } from '../types';
 
 const PROOF_SERVER_URL = 'http://localhost:6300';
-const INDEXER_URL = 'https://indexer.preprod.midnight.network/api/v4/graphql';
-const INDEXER_WS = 'wss://indexer.preprod.midnight.network/api/v4/graphql/ws';
-const NETWORK_ID = 'TestNet';
+const INDEXER_URL = 'https://indexer.preview.midnight.network/api/v4/graphql';
+const INDEXER_WS = 'wss://indexer.preview.midnight.network/api/v4/graphql/ws';
+const NETWORK_ID = 'preview';
 
 // Derive a SHA-256 commitment from donor data using browser crypto
 async function deriveCommitment(data: DonorFormData, walletAddress: string): Promise<string> {
@@ -30,7 +30,7 @@ async function deriveCommitment(data: DonorFormData, walletAddress: string): Pro
  * This calls window.midnight.mnLace (or whichever wallet is connected) to:
  * 1. Build a ZK proof using the local proof server
  * 2. Request wallet signing approval (triggers the 1AM / Lace popup)
- * 3. Submit the transaction to Midnight Preprod
+ * 3. Submit the transaction to Midnight Preview
  */
 export async function registerDonorOnChain(
   data: DonorFormData,

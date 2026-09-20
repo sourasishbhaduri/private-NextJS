@@ -69,7 +69,7 @@ export const DonorRegistrationForm: React.FC<DonorRegistrationFormProps> = ({ on
     <div className="saas-card" style={{ padding: '28px' }}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <div style={{ background: 'rgba(16, 185, 129, 0.15)', padding: '10px', borderRadius: '10px', color: '#10b981' }}>
+          <div style={{ background: 'rgba(249, 115, 22, 0.15)', padding: '10px', borderRadius: '10px', color: '#f97316' }}>
             <UserCheck size={22} />
           </div>
           <div>
@@ -89,7 +89,7 @@ export const DonorRegistrationForm: React.FC<DonorRegistrationFormProps> = ({ on
         {/* Secret Donor Identity */}
         <div className="form-group">
           <label className="form-label" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-            <Lock size={14} color="#10b981" /> Secret Donor Identity / Passphrase (Off-Chain Private Input)
+            <Lock size={14} color="#f97316" /> Secret Donor Identity / Passphrase (Off-Chain Private Input)
           </label>
           <input
             type="password"
@@ -153,11 +153,11 @@ export const DonorRegistrationForm: React.FC<DonorRegistrationFormProps> = ({ on
                   key={organ.bit}
                   onClick={() => toggleOrgan(organ.bit)}
                   style={{
-                    background: selected ? 'rgba(16, 185, 129, 0.15)' : 'rgba(255, 255, 255, 0.03)',
-                    border: `1px solid ${selected ? '#10b981' : 'var(--border-glass)'}`,
+                    background: selected ? 'rgba(249, 115, 22, 0.15)' : 'rgba(255, 255, 255, 0.03)',
+                    border: `1px solid ${selected ? '#f97316' : 'var(--border-glass)'}`,
                     borderRadius: '8px',
                     padding: '10px 12px',
-                    color: selected ? '#34d399' : 'var(--text-secondary)',
+                    color: selected ? '#fb923c' : 'var(--text-secondary)',
                     fontWeight: selected ? 600 : 400,
                     cursor: 'pointer',
                     fontSize: '0.85rem',
@@ -168,7 +168,7 @@ export const DonorRegistrationForm: React.FC<DonorRegistrationFormProps> = ({ on
                   }}
                 >
                   <span>{organ.label}</span>
-                  {selected && <CheckCircle2 size={14} color="#10b981" />}
+                  {selected && <CheckCircle2 size={14} color="#f97316" />}
                 </button>
               );
             })}
@@ -215,27 +215,27 @@ export const DonorRegistrationForm: React.FC<DonorRegistrationFormProps> = ({ on
             marginTop: '20px',
             padding: '16px',
             borderRadius: '12px',
-            background: resultStatus.success ? 'rgba(16, 185, 129, 0.1)' : 'rgba(244, 63, 94, 0.1)',
-            border: `1px solid ${resultStatus.success ? 'rgba(16, 185, 129, 0.3)' : 'rgba(244, 63, 94, 0.3)'}`,
+            background: resultStatus.success ? 'rgba(249, 115, 22, 0.1)' : 'rgba(244, 63, 94, 0.1)',
+            border: `1px solid ${resultStatus.success ? 'rgba(249, 115, 22, 0.3)' : 'rgba(244, 63, 94, 0.3)'}`,
             display: 'flex',
             alignItems: 'flex-start',
             gap: '12px',
           }}
         >
           {resultStatus.success ? (
-            <CheckCircle2 size={22} color="#10b981" style={{ flexShrink: 0, marginTop: '2px' }} />
+            <CheckCircle2 size={22} color="#f97316" style={{ flexShrink: 0, marginTop: '2px' }} />
           ) : (
             <AlertCircle size={22} color="#f43f5e" style={{ flexShrink: 0, marginTop: '2px' }} />
           )}
           <div style={{ width: '100%' }}>
-            <h4 style={{ color: resultStatus.success ? '#34d399' : '#fb7185', fontWeight: 600, fontSize: '0.95rem' }}>
+            <h4 style={{ color: resultStatus.success ? '#fb923c' : '#fb7185', fontWeight: 600, fontSize: '0.95rem' }}>
               {resultStatus.success ? 'Registration Successfully Proven & On-Chain!' : 'Registration Error'}
             </h4>
             {resultStatus.success ? (
               <div style={{ marginTop: '6px', fontSize: '0.85rem', display: 'flex', flexDirection: 'column', gap: '4px' }}>
                 <div>
                   <span style={{ color: 'var(--text-secondary)' }}>Public Commitment: </span>
-                  <span className="font-mono" style={{ color: '#34d399', wordBreak: 'break-all' }}>
+                  <span className="font-mono" style={{ color: '#fb923c', wordBreak: 'break-all' }}>
                     {resultStatus.commitment}
                   </span>
                 </div>
