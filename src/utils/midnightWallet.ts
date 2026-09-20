@@ -120,30 +120,30 @@ export async function connectLaceWallet(walletId?: string): Promise<{
     }
   }
 
-  // Request wallet connection permission (triggers Lace extension modal)
+  // Request wallet connection permission (triggers 1AM / Lace extension modal)
   let walletAPI;
-  if (typeof targetWallet.provider.connect === 'function') {
-    // Note: Some newer wallets require a network identifier like 'testnet' or 'preview'.
-    try {
-      walletAPI = await targetWallet.provider.connect('preview');
-    } catch (err: any) {
-      console.warn("Failed to connect with 'preview' network argument. Trying without arguments...", err);
+  try {
+    if (targetWallet.id === '1am' && typeof targetWallet.provider.enable === 'function') {
+      walletAPI = await targetWallet.provider.enable();
+    } else if (typeof targetWallet.provider.connect === 'function') {
       try {
+        walletAPI = await targetWallet.provider.connect('preview');
+      } catch (err) {
+        console.warn("Failed to connect with 'preview' network. Trying default connect()...");
         walletAPI = await targetWallet.provider.connect();
-      } catch (fallbackErr) {
-        throw err; // Throw the original connection error (e.g., 'Request connection failed')
       }
+    } else if (typeof targetWallet.provider.enable === 'function') {
+      walletAPI = await targetWallet.provider.enable();
+    } else {
+      throw new Error(`Wallet API missing .enable or .connect`);
     }
-  } else if (typeof targetWallet.provider.enable === 'function') {
-    walletAPI = await targetWallet.provider.enable();
-  } else {
-    const keys = targetWallet.provider ? Object.keys(targetWallet.provider).join(', ') : 'null';
-    throw new Error(`Wallet API is missing (no .enable or .connect). Available keys on provider: ${keys}`);
+  } catch (err: any) {
+    throw new Error(`Failed to authorize wallet: ${err.message || err}`);
   }
 
   let address = '';
-  let tNightBalance = BigInt("10000000000"); // Default initial balance representation
-  let dustBalance = BigInt("500000000");
+  let tNightBalance: bigint | null = null;
+  let dustBalance: bigint | null = null;
 
   // Try extracting state or addresses from the connected wallet API
   try {
@@ -211,8 +211,8 @@ export async function connectLaceWallet(walletId?: string): Promise<{
   return {
     address,
     walletName: targetWallet.name,
-    tNightBalance,
-    dustBalance,
+    tNightBalance: tNightBalance ?? 0n,
+    dustBalance: dustBalance ?? 0n,
     api: walletAPI,
   };
 }

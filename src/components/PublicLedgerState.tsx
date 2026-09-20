@@ -86,9 +86,15 @@ export const PublicLedgerState: React.FC<PublicLedgerStateProps> = ({ data, onRe
             Active & Indexed
           </div>
           {process.env.NEXT_PUBLIC_CONTRACT_ADDRESS && (
-            <div className="text-xs font-mono text-slate-500 mt-2 truncate bg-white p-2 rounded border border-slate-200" title={process.env.NEXT_PUBLIC_CONTRACT_ADDRESS}>
+            <a
+              href={`https://explorer.preview.midnight.network/?search=${process.env.NEXT_PUBLIC_CONTRACT_ADDRESS}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="block text-xs font-mono text-slate-500 mt-2 truncate bg-white p-2 rounded border border-slate-200 hover:text-blue-600 hover:border-blue-300 transition-colors cursor-pointer"
+              title="View on Midnight Preview Explorer"
+            >
               {process.env.NEXT_PUBLIC_CONTRACT_ADDRESS}
-            </div>
+            </a>
           )}
           <div className="text-sm font-medium text-slate-400 mt-2">
             {data.lastUpdated ? `Last Sync: ${data.lastUpdated.toLocaleTimeString()}` : 'Connected to Midnight'}
