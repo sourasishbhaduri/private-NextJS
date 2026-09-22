@@ -15,12 +15,7 @@ export default function RegisterPage() {
   
   return (
     <div className="app-container">
-      <Navbar
-        wallet={wallet}
-        onConnect={() => setIsWalletModalOpen(true)}
-        onDisconnect={() => setWallet({ ...wallet, connected: false, address: null, tNightBalance: null, dustBalance: null, api: null })}
-        onNetworkChange={(network) => setWallet({ ...wallet, network })}
-      />
+      <Navbar />
       
 
       <main className="main-content" style={{ padding: '40px 20px', maxWidth: '800px', margin: '0 auto' }}>

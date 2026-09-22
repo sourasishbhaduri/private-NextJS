@@ -5,7 +5,7 @@ import { deployContract } from '@midnight-ntwrk/midnight-js-contracts';
 import { httpClientProofProvider } from '@midnight-ntwrk/midnight-js-http-client-proof-provider';
 import { indexerPublicDataProvider } from '@midnight-ntwrk/midnight-js-indexer-public-data-provider';
 // Dynamic imports will be used for providers that depend on node/browser specific APIs to prevent SSR crashes
-import type { ZKConfigProvider } from '@midnight-ntwrk/midnight-js-types';
+import { ZKConfigProvider, createZKIR, createProverKey, createVerifierKey, type ZKIR, type ProverKey, type VerifierKey } from '@midnight-ntwrk/midnight-js-types';
 import { setNetworkId } from '@midnight-ntwrk/midnight-js-network-id';
 
 export interface OrganDonorPrivateState {
@@ -24,33 +24,33 @@ const initialPrivateState: OrganDonorPrivateState = {
   secretClearanceHash: new Uint8Array(32).fill(1),
 };
 
-class FetchZkConfigProvider implements ZKConfigProvider {
-  constructor(private basePath: string) {}
+class FetchZkConfigProvider extends ZKConfigProvider<string> {
+  constructor(private basePath: string) { super(); }
 
   private parseName(contractName: string) {
     const parts = contractName.split('#');
     return parts.length > 1 ? parts[1] : parts[0];
   }
 
-  async getZKIR(contractName: string): Promise<Uint8Array> {
+  async getZKIR(contractName: string): Promise<ZKIR> {
     const name = this.parseName(contractName);
     const res = await fetch(`${this.basePath}/zkir/${name}.zkir`);
     if (!res.ok) throw new Error(`Failed to fetch ZKIR: ${res.statusText} (${res.url})`);
-    return new Uint8Array(await res.arrayBuffer());
+    return createZKIR(new Uint8Array(await res.arrayBuffer()));
   }
 
-  async getProverKey(contractName: string): Promise<Uint8Array> {
+  async getProverKey(contractName: string): Promise<ProverKey> {
     const name = this.parseName(contractName);
     const res = await fetch(`${this.basePath}/keys/${name}.prover`);
     if (!res.ok) throw new Error(`Failed to fetch Prover Key: ${res.statusText} (${res.url})`);
-    return new Uint8Array(await res.arrayBuffer());
+    return createProverKey(new Uint8Array(await res.arrayBuffer()));
   }
 
-  async getVerifierKey(contractName: string): Promise<Uint8Array> {
+  async getVerifierKey(contractName: string): Promise<VerifierKey> {
     const name = this.parseName(contractName);
     const res = await fetch(`${this.basePath}/keys/${name}.verifier`);
     if (!res.ok) throw new Error(`Failed to fetch Verifier Key: ${res.statusText} (${res.url})`);
-    return new Uint8Array(await res.arrayBuffer());
+    return createVerifierKey(new Uint8Array(await res.arrayBuffer()));
   }
 }
 
@@ -214,7 +214,7 @@ export async function deployOrganDonorRegistry(walletCtx: WalletState) {
   console.log("──────────────────────────────");
 
   try {
-    const deployedContract = await deployContract(providers, {
+    const deployedContract = await deployContract(providers as any, {
       privateStateId: 'organDonorRegistryPrivateState',
       compiledContract,
       args: [],
