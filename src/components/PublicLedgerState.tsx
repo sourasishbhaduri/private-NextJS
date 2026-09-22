@@ -89,11 +89,11 @@ export const PublicLedgerState: React.FC<PublicLedgerStateProps> = ({ data, onRe
           </div>
           {CONTRACT_ADDR && (
             <a
-              href={`https://explorer.preview.midnight.network/?search=${CONTRACT_ADDR}`}
+              href={`https://explorer.1am.xyz/contract/${CONTRACT_ADDR}`}
               target="_blank"
               rel="noopener noreferrer"
               className="block text-xs font-mono text-slate-500 mt-2 truncate bg-white p-2 rounded border border-slate-200 hover:text-blue-600 hover:border-blue-300 transition-colors cursor-pointer"
-              title="View on Midnight Preview Explorer"
+              title="View on 1AM Explorer"
             >
               {CONTRACT_ADDR}
             </a>

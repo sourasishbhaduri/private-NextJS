@@ -129,12 +129,12 @@ export const DeployContractCard: React.FC = () => {
         ) : (
           <div className="flex flex-col gap-2 pt-2">
             <a
-              href={`https://explorer.preview.midnight.network/?search=${contractId}`}
+              href={`https://explorer.1am.xyz/contract/${contractId}`}
               target="_blank"
               rel="noreferrer"
               className="w-full btn-saas-secondary text-xs py-2.5 px-4 flex items-center justify-center gap-2 bg-white/5 border-white/10 hover:bg-white/10 text-white rounded-xl font-medium transition-all"
             >
-              View on Midnight Explorer <ExternalLink size={13} />
+              View on Preview Explorer (1AM) <ExternalLink size={13} />
             </a>
             <div className="flex justify-between items-center text-[11px] text-slate-500 pt-1">
               <span>Compact v0.24 • Zero-Knowledge</span>
