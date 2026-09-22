@@ -55,6 +55,8 @@ export const NETWORK_CONFIGS: Record<NetworkId, NetworkConfig> = {
     node:      'https://rpc.preview.midnight.network',
     proofServer: 'http://127.0.0.1:6300',
     faucet: 'https://midnight-tmnight-preview.nethermind.dev',
+    composeServices: ['proof-server'],
+  },
 };
 
 export function isNetworkId(v: unknown): v is NetworkId {

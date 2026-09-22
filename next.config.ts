@@ -11,7 +11,17 @@ const nextConfig: NextConfig = {
   },
   // Required for Midnight SDK packages that use Node.js built-ins in browser context
   webpack: (config, { isServer }) => {
+    config.experiments = {
+      ...config.experiments,
+      asyncWebAssembly: true,
+      layers: true,
+    };
+    
     if (!isServer) {
+      config.resolve.alias = {
+        ...config.resolve.alias,
+        'isomorphic-ws': require('path').resolve(__dirname, 'mock-ws.mjs'),
+      };
       config.resolve.fallback = {
         ...config.resolve.fallback,
         fs: false,

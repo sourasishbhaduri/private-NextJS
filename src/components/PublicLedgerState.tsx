@@ -10,6 +10,8 @@ interface PublicLedgerStateProps {
   isLoading: boolean;
 }
 
+const CONTRACT_ADDR = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS || '8d65e9ea8a166da7ed15128e0bd60dfa4f8d81bac644f1a16f03cf4253cb9a51';
+
 const BLOOD_LABELS: Record<number, { name: string; tag: string }> = {
   1: { name: 'O-', tag: 'Universal Donor' },
   2: { name: 'O+', tag: 'Common Positive' },
@@ -85,15 +87,15 @@ export const PublicLedgerState: React.FC<PublicLedgerStateProps> = ({ data, onRe
             </span>
             Active & Indexed
           </div>
-          {process.env.NEXT_PUBLIC_CONTRACT_ADDRESS && (
+          {CONTRACT_ADDR && (
             <a
-              href={`https://explorer.preview.midnight.network/?search=${process.env.NEXT_PUBLIC_CONTRACT_ADDRESS}`}
+              href={`https://explorer.preview.midnight.network/?search=${CONTRACT_ADDR}`}
               target="_blank"
               rel="noopener noreferrer"
               className="block text-xs font-mono text-slate-500 mt-2 truncate bg-white p-2 rounded border border-slate-200 hover:text-blue-600 hover:border-blue-300 transition-colors cursor-pointer"
               title="View on Midnight Preview Explorer"
             >
-              {process.env.NEXT_PUBLIC_CONTRACT_ADDRESS}
+              {CONTRACT_ADDR}
             </a>
           )}
           <div className="text-sm font-medium text-slate-400 mt-2">

@@ -1,238 +1,137 @@
 "use client";
 
-// Utilities for Midnight Lace Wallet & extension detection
+// Utilities for Midnight DApp Connector API v4
+import type { InitialAPI, ConnectedAPI, Configuration } from '@midnight-ntwrk/dapp-connector-api';
 
 export interface DetectedWallet {
   id: string;
   name: string;
   icon?: string;
   apiVersion?: string;
-  provider: any;
+  provider: InitialAPI;
 }
 
 declare global {
   interface Window {
-    midnight?: Record<string, any>;
-    cardano?: Record<string, any>;
+    midnight?: Record<string, InitialAPI>;
   }
 }
 
 /**
- * Detects injected Midnight-compatible wallets available in the browser (e.g. Lace Wallet).
+ * Detects injected Midnight-compatible wallets available in the browser.
+ * Follows the v4 connector API which injects InitialAPI into window.midnight.
  */
 export function detectMidnightWallets(): DetectedWallet[] {
   const wallets: DetectedWallet[] = [];
 
-  if (typeof window === 'undefined') return wallets;
+  if (typeof window === 'undefined' || !window.midnight) {
+    return wallets;
+  }
 
-  // Check window.midnight object
-  if (window.midnight) {
-    for (const key of Object.keys(window.midnight)) {
-      const provider = window.midnight[key];
-      if (provider && (typeof provider.enable === 'function' || typeof provider.connect === 'function')) {
-        let name = provider.name || key;
-        if (key === 'mnLace' || key === 'lace') name = 'Midnight Lace Wallet';
-        if (key === '1am') name = '1AM Midnight Wallet';
-        
-        wallets.push({
-          id: key,
-          name,
-          icon: provider.icon,
-          apiVersion: provider.apiVersion,
-          provider,
-        });
-      }
+  for (const key of Object.keys(window.midnight)) {
+    const provider = window.midnight[key];
+    if (provider && typeof provider.connect === 'function') {
+      wallets.push({
+        id: key,
+        name: provider.name || key,
+        icon: provider.icon,
+        apiVersion: provider.apiVersion,
+        provider,
+      });
     }
-  }
-
-  // Fallback check for 1AM Wallet if not iterated
-  if (!wallets.some((w) => w.id === '1am') && window.midnight?.['1am']) {
-    wallets.push({
-      id: '1am',
-      name: '1AM Midnight Wallet',
-      icon: window.midnight['1am'].icon,
-      apiVersion: window.midnight['1am'].apiVersion,
-      provider: window.midnight['1am'],
-    });
-  }
-
-  // Fallback check for Lace if window.midnight.mnLace exists directly
-  if (!wallets.some((w) => w.id === 'mnLace') && window.midnight?.mnLace) {
-    wallets.push({
-      id: 'mnLace',
-      name: 'Midnight Lace Wallet',
-      icon: window.midnight.mnLace.icon,
-      apiVersion: window.midnight.mnLace.apiVersion,
-      provider: window.midnight.mnLace,
-    });
-  }
-
-  // Fallback for Standard Cardano Lace Wallet (for UI demo purposes if Midnight build is missing)
-  if (!wallets.some((w) => w.id === 'mnLace') && window.cardano?.lace) {
-    wallets.push({
-      id: 'lace_mock',
-      name: 'Lace Wallet (Standard)',
-      icon: window.cardano.lace.icon,
-      apiVersion: 'mock',
-      provider: {
-        enable: async () => ({
-           // Mock API for standard Lace to pass the UI checks
-           getShieldedAddresses: async () => ['mn_addr_mock_lace1q...'],
-        }),
-      },
-    });
   }
 
   return wallets;
 }
 
+import { WalletState } from '../types';
+
 /**
- * Connects to Midnight Lace Wallet via DApp connector API
+ * Connects to the 1AM Midnight Wallet via DApp Connector API v4
+ * Specifically enforces connection to the "preview" network.
  */
-export async function connectLaceWallet(walletId?: string): Promise<{
-  address: string;
-  walletName: string;
-  tNightBalance: bigint;
-  dustBalance: bigint;
-  api: any;
-}> {
+export async function connect1AMWallet(): Promise<WalletState> {
+  if (typeof window === 'undefined') {
+    throw new Error('Browser environment not detected.');
+  }
+
+  // 1. Discover available wallets and identify 1AM
   const wallets = detectMidnightWallets();
-  
-  let targetWallet = walletId ? wallets.find((w) => w.id === walletId) : (wallets.find(w => w.id === '1am') || wallets.find(w => w.id === 'mnLace') || wallets[0]);
-  
+  const targetWallet = wallets.find((w) => w.id === '1am');
+
   if (!targetWallet) {
-    if (window.midnight?.['1am']) {
-      targetWallet = {
-        id: '1am',
-        name: '1AM Midnight Wallet',
-        provider: window.midnight['1am'],
-      };
-    } else if (window.midnight?.mnLace) {
-      targetWallet = {
-        id: 'mnLace',
-        name: 'Midnight Lace Wallet',
-        provider: window.midnight.mnLace,
-      };
-    } else {
-      throw new Error(
-        'No supported Midnight Wallet extension (like 1AM or Lace) was found. Please install a compatible wallet and refresh the page.'
-      );
-    }
+    throw new Error(
+      '1AM Wallet not detected. Install/unlock 1AM and refresh.'
+    );
   }
 
-  // Request wallet connection permission (triggers 1AM / Lace extension modal)
-  let walletAPI;
+  // 2. Request connection to: Preview
+  console.log(`[1AM] Connector detected. API version: ${targetWallet.apiVersion || 'unknown'}`);
+  console.log(`[1AM] Requesting connection to Preview...`);
+
+  let connectedApi: ConnectedAPI;
   try {
-    if (targetWallet.id === '1am' && typeof targetWallet.provider.enable === 'function') {
-      walletAPI = await targetWallet.provider.enable();
-    } else if (typeof targetWallet.provider.connect === 'function') {
-      try {
-        walletAPI = await targetWallet.provider.connect('preview');
-      } catch (err) {
-        console.warn("Failed to connect with 'preview' network. Trying default connect()...");
-        walletAPI = await targetWallet.provider.connect();
-      }
-    } else if (typeof targetWallet.provider.enable === 'function') {
-      walletAPI = await targetWallet.provider.enable();
-    } else {
-      throw new Error(`Wallet API missing .enable or .connect`);
-    }
+    connectedApi = await targetWallet.provider.connect('preview');
   } catch (err: any) {
-    throw new Error(`Failed to authorize wallet: ${err.message || err}`);
+    throw new Error(`1AM Wallet rejected the connection. Please open your 1AM extension, go to Settings -> Connected DApps, click the Disconnect button for localhost, refresh the page, and try again. Detailed error: ${err.message || err}`);
   }
 
-  let address = '';
-  let tNightBalance: bigint | null = null;
-  let dustBalance: bigint | null = null;
+  console.log(`[1AM] Wallet connection approved!`);
 
-  // Try extracting state or addresses from the connected wallet API
-  try {
-    let stateObservable = walletAPI.state;
-    if (typeof walletAPI.state === 'function') {
-      stateObservable = walletAPI.state();
-    }
+  // 3. Obtain configuration
+  const configuration = await connectedApi.getConfiguration();
+  console.log(`[1AM] Wallet configuration received for network: ${configuration.networkId}`);
 
-    if (stateObservable && typeof stateObservable.subscribe === 'function') {
-      // Observable state
-      await new Promise<void>((resolve) => {
-        const sub = stateObservable.subscribe({
-          next: (state: any) => {
-            if (state?.shielded?.address) {
-              address = state.shielded.address;
-            } else if (state?.unshielded?.address) {
-              address = state.unshielded.address;
-            }
-            if (state?.balances?.tNight) {
-              tNightBalance = BigInt(state.balances.tNight);
-            }
-            if (state?.balances?.dust) {
-              dustBalance = BigInt(state.balances.dust);
-            }
-            resolve();
-          },
-          error: () => resolve(),
-        });
-        setTimeout(() => {
-          if (sub && typeof sub.unsubscribe === 'function') sub.unsubscribe();
-          resolve();
-        }, 1000);
-      });
-    }
-    
-    // Fallback checks for address if state subscription failed or didn't return address
-    if (!address && typeof walletAPI.getShieldedAddresses === 'function') {
-      const addresses = await walletAPI.getShieldedAddresses();
-      if (addresses && addresses[0]) address = addresses[0];
-    }
-    if (!address && typeof walletAPI.getUnshieldedAddresses === 'function') {
-      const addresses = await walletAPI.getUnshieldedAddresses();
-      if (addresses && addresses[0]) address = addresses[0];
-    }
-    if (!address && typeof walletAPI.getAddresses === 'function') {
-      const addresses = await walletAPI.getAddresses();
-      if (addresses && addresses[0]) address = addresses[0];
-    }
-    if (!address && typeof walletAPI.getUsedAddresses === 'function') {
-      const addresses = await walletAPI.getUsedAddresses();
-      if (addresses && addresses[0]) address = addresses[0];
-    }
-  } catch (e) {
-    console.warn('Could not query full state from wallet API:', e);
+  if (configuration.networkId !== 'preview' && configuration.networkId !== 'testnet') {
+      throw new Error(`Wallet connected to wrong network: ${configuration.networkId}. Expected: preview.`);
   }
 
-  // Fallback format if address is not directly returned by the extension state call
-  if (!address) {
-    const randomHex = Array.from(crypto.getRandomValues(new Uint8Array(16)))
-      .map((b) => b.toString(16).padStart(2, '0'))
-      .join('');
-    address = `mn_addr_lace1q${randomHex}`;
+  // 4. Retrieve Addresses & Coin Public Key
+  const shieldedAddresses = await connectedApi.getShieldedAddresses();
+  const unshieldedInfo = await connectedApi.getUnshieldedAddress();
+  
+  if (!shieldedAddresses || !shieldedAddresses.shieldedAddress) {
+      throw new Error("Could not retrieve shielded address from connected wallet.");
   }
+  
+  const address = shieldedAddresses.shieldedAddress || unshieldedInfo.unshieldedAddress;
+  const coinPublicKey = shieldedAddresses.shieldedCoinPublicKey;
+  const encryptionPublicKey = shieldedAddresses.shieldedEncryptionPublicKey;
+
+  if (!coinPublicKey) {
+      throw new Error("Wallet did not return a valid coin public key.");
+  }
+  
+  if (!encryptionPublicKey) {
+      throw new Error("Wallet did not return a valid encryption public key. Please ensure your wallet is fully initialized.");
+  }
+
+  // 5. Retrieve Balances
+  const unshieldedBalances = await connectedApi.getUnshieldedBalances();
+  const dustInfo = await connectedApi.getDustBalance();
+
+  // Handle older vs newer token type mappings (tNight vs NIGHT vs Unshielded etc)
+  let tNightBalance = 0n;
+  for (const [key, value] of Object.entries(unshieldedBalances)) {
+      if (key.toLowerCase().includes('night')) {
+          tNightBalance = value;
+          break;
+      }
+  }
+
+  const dustBalance = dustInfo?.balance ?? 0n;
 
   return {
+    connected: true,
     address,
+    coinPublicKey,
+    encryptionPublicKey,
     walletName: targetWallet.name,
-    tNightBalance: tNightBalance ?? 0n,
-    dustBalance: dustBalance ?? 0n,
-    api: walletAPI,
-  };
-}
-
-/**
- * Creates a deterministic seed wallet for testing on local devnet or when Lace extension is not active.
- */
-export async function connectSeedWallet(seed: string): Promise<{
-  address: string;
-  tNightBalance: bigint;
-  dustBalance: bigint;
-}> {
-  const encoder = new TextEncoder();
-  const hashBuf = await crypto.subtle.digest('SHA-256', encoder.encode(seed || 'default-devnet-seed'));
-  const hashArray = Array.from(new Uint8Array(hashBuf));
-  const hex = hashArray.map((b) => b.toString(16).padStart(2, '0')).join('').slice(0, 32);
-
-  return {
-    address: `mn_addr_devnet1q${hex}`,
-    tNightBalance: BigInt("5000000000"),
-    dustBalance: BigInt("250000000"),
+    network: configuration.networkId as 'preview',
+    tNightBalance,
+    dustBalance,
+    api: connectedApi,
+    configuration,
+    providerType: '1am'
   };
 }

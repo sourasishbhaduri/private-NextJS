@@ -6,12 +6,13 @@ import Link from 'next/link';
 import { ArrowLeft, Activity, Heart, Shield } from 'lucide-react';
 import { Navbar } from '../../components/Navbar';
 import { WalletState } from '../../types';
+import { DeployContractCard } from '../../components/DeployContractCard';
 
 export default function DashboardPage() {
   const { wallet, setIsWalletModalOpen } = useWallet();
     
   return (
-    <div className="min-h-screen flex flex-col bg-slate-50 selection:bg-emerald-500 selection:text-white">
+    <div className="min-h-screen flex flex-col bg-slate-50 selection:bg-orange-500 selection:text-white">
       <Navbar />
       
 
@@ -20,13 +21,13 @@ export default function DashboardPage() {
         {/* Sidebar Navigation */}
         <aside className="w-full md:w-64 flex-shrink-0">
           <div className="sticky top-24 saas-card p-6 border-slate-200 shadow-sm rounded-2xl bg-white/60">
-            <Link href="/" className="group flex items-center gap-2 text-slate-500 hover:text-emerald-600 transition-colors mb-8 font-medium">
+            <Link href="/" className="group flex items-center gap-2 text-slate-500 hover:text-orange-600 transition-colors mb-8 font-medium">
               <ArrowLeft size={18} className="group-hover:-translate-x-1 transition-transform" /> 
               Back to Home
             </Link>
 
             <nav className="flex flex-col gap-2">
-              <Link href="/dashboard" className="flex items-center gap-3 px-4 py-3 rounded-xl bg-emerald-50 text-emerald-700 font-semibold transition-all">
+              <Link href="/dashboard" className="flex items-center gap-3 px-4 py-3 rounded-xl bg-orange-50 text-orange-700 font-semibold transition-all">
                 <Activity size={20} /> Overview
               </Link>
               <Link href="/register" className="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 hover:bg-slate-100 hover:text-slate-900 font-medium transition-all group">
@@ -58,7 +59,7 @@ export default function DashboardPage() {
                <p className="text-slate-500 max-w-md mx-auto mb-8 text-lg">
                  Connect your Lace or 1AM Wallet to securely access your local zero-knowledge proofs and on-chain status.
                </p>
-               <button onClick={() => setIsWalletModalOpen(true)} className="btn-saas-primary shadow-emerald-500/20 hover:shadow-emerald-500/40 text-lg px-8 py-3 rounded-xl transition-all hover:-translate-y-1">
+               <button onClick={() => setIsWalletModalOpen(true)} className="btn-saas-primary shadow-orange-500/20 hover:shadow-orange-500/40 text-lg px-8 py-3 rounded-xl transition-all hover:-translate-y-1">
                  Connect Wallet
                </button>
              </div>
@@ -66,29 +67,28 @@ export default function DashboardPage() {
             <div className="grid gap-6">
               
               {/* Wallet Connection Status Card */}
-              <div className="saas-card relative overflow-hidden p-6 border-emerald-200 bg-emerald-50/50 rounded-3xl group">
-                <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-400/10 rounded-full blur-3xl -mr-16 -mt-16 transition-transform group-hover:scale-110"></div>
+              <div className="saas-card relative overflow-hidden p-6 border-orange-200 bg-orange-50/50 rounded-3xl group">
+                <div className="absolute top-0 right-0 w-64 h-64 bg-orange-400/10 rounded-full blur-3xl -mr-16 -mt-16 transition-transform group-hover:scale-110"></div>
                 <div className="relative flex items-center gap-5 z-10">
-                  <div className="p-4 bg-emerald-100 text-emerald-600 rounded-2xl shadow-sm">
+                  <div className="p-4 bg-orange-100 text-orange-600 rounded-2xl shadow-sm">
                     <Shield size={28} className="animate-pulse" />
                   </div>
                   <div>
-                    <h3 className="text-lg font-bold text-emerald-950 flex items-center gap-2">
+                    <h3 className="text-lg font-bold text-orange-950 flex items-center gap-2">
                       Secure Connection Active 
                       <span className="relative flex h-3 w-3">
-                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                        <span className="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
+                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75"></span>
+                        <span className="relative inline-flex rounded-full h-3 w-3 bg-orange-500"></span>
                       </span>
                     </h3>
-                    <p className="text-sm text-emerald-700 mt-1 flex items-center gap-2">
-                      <span className="font-mono bg-white/60 px-2 py-0.5 rounded border border-emerald-200 shadow-sm">{wallet.address}</span>
+                    <p className="text-sm text-orange-700 mt-1 flex items-center gap-2">
+                      <span className="font-mono bg-white/60 px-2 py-0.5 rounded border border-orange-200 shadow-sm">{wallet.address}</span>
                     </p>
                   </div>
                 </div>
               </div>
-
               {/* KPI Grid */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 
                 {/* Balance Card */}
                 <div className="saas-card p-6 md:p-8 bg-white rounded-3xl border-slate-200 hover:border-blue-300 transition-colors group">
@@ -103,9 +103,11 @@ export default function DashboardPage() {
                     <span className="text-lg md:text-xl font-semibold text-slate-400">tNIGHT</span>
                   </div>
                   <div className="mt-4 inline-flex items-center gap-2 px-3 py-1 bg-slate-100 text-slate-600 text-sm font-medium rounded-full">
-                    DUST: <span className="font-mono text-slate-800">{wallet.dustBalance ? Number(wallet.dustBalance).toLocaleString() : '0'}</span>
+                    tDUST: <span className="font-mono text-slate-800">{wallet.dustBalance ? (Number(wallet.dustBalance) / 1_000_000).toLocaleString(undefined, { maximumFractionDigits: 2 }) : '0'}</span>
                   </div>
                 </div>
+
+                <DeployContractCard />
                 
                 {/* Actions Card */}
                 <div className="saas-card p-6 md:p-8 bg-white rounded-3xl border-slate-200 hover:border-purple-300 transition-colors flex flex-col">

@@ -13,11 +13,11 @@
   
   --primary: #f97316;
   --primary-hover: #ea580c;
-  --primary-subtle: #fff7ed;
+  --primary-subtle: #ecfdf5;
   --primary-ring: rgba(249, 115, 22, 0.15);
   
-  --secondary: #6366f1;
-  --secondary-subtle: #eef2ff;
+  --secondary: #f59e0b;
+  --secondary-subtle: #f0fdfa;
   
   --text-primary: #111827;
   --text-secondary: #4b5563;
@@ -226,10 +226,10 @@ body {
   text-transform: uppercase;
 }
 
-.badge-green {
-  background-color: #ecfccb;
-  color: #4d7c0f;
-  border: 1px solid #d9f99d;
+.badge-orange {
+  background-color: #ffedd5;
+  color: #c2410c;
+  border: 1px solid #fed7aa;
 }
 
 .badge-blue {

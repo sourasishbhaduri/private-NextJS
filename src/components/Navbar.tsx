@@ -4,6 +4,7 @@ import React from 'react';
 import { ShieldCheck, HeartPulse, Wallet, Network } from 'lucide-react';
 import { NetworkId } from '../types';
 import { useWallet } from '../contexts/WalletContext';
+import Link from 'next/link';
 
 export const Navbar: React.FC = () => {
   const { wallet, setWallet, setIsWalletModalOpen } = useWallet();
@@ -27,10 +28,12 @@ export const Navbar: React.FC = () => {
           </div>
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <h1 className="" style={{ fontSize: '1.4rem', fontWeight: 700, letterSpacing: '-0.02em' }}>
-                Private Organ Donor Registry
-              </h1>
-              <span className="badge-pill badge-green">
+              <Link href="/" style={{ textDecoration: 'none', color: 'inherit' }}>
+                <h1 className="" style={{ fontSize: '1.4rem', fontWeight: 700, letterSpacing: '-0.02em' }}>
+                  Private Organ Donor Registry
+                </h1>
+              </Link>
+              <span className="badge-pill badge-orange">
                 <ShieldCheck size={12} /> ZK Protected
               </span>
             </div>
@@ -69,7 +72,7 @@ export const Navbar: React.FC = () => {
             <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
               <div className="saas-card" style={{ padding: '8px 14px', display: 'flex', alignItems: 'center', gap: '10px' }}>
                 <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#f97316' }} className="animate-pulse-glow" />
-                <span className="badge-pill badge-green" style={{ fontSize: '0.75rem' }}>
+                <span className="badge-pill badge-orange" style={{ fontSize: '0.75rem' }}>
                   {wallet.walletName || 'Lace Wallet'}
                 </span>
                 <span className="font-mono" style={{ fontSize: '0.85rem' }}>

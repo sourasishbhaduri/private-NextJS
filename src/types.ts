@@ -8,9 +8,12 @@ export interface WalletState {
   dustBalance: bigint | null;
   syncing?: boolean;
   walletName?: string | null;
-  providerType?: 'lace' | 'seed' | 'other';
+  providerType?: 'lace' | '1am' | 'seed' | 'other';
   error?: string | null;
   api?: any; // Raw DApp connector API object from the wallet
+  configuration?: any; // Wallet configuration (Indexer, Prover, Node URIs)
+  coinPublicKey?: string; // Shielded Coin Public Key for proofs
+  encryptionPublicKey?: string; // Shielded Encryption Public Key
 }
 
 export interface DonorFormData {

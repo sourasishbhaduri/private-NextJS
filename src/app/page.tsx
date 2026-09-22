@@ -25,11 +25,11 @@ export default function LandingPage() {
           overflow: 'hidden'
         }}>
           {/* Background Decorative elements */}
-          <div style={{ position: 'absolute', top: '-150px', right: '-10%', width: '500px', height: '500px', background: 'radial-gradient(circle, rgba(249, 115, 22,0.05) 0%, rgba(255,255,255,0) 70%)', borderRadius: '50%', zIndex: 0 }} />
-          <div style={{ position: 'absolute', bottom: '-150px', left: '-10%', width: '500px', height: '500px', background: 'radial-gradient(circle, rgba(14,165,233,0.05) 0%, rgba(255,255,255,0) 70%)', borderRadius: '50%', zIndex: 0 }} />
+          <div style={{ position: 'absolute', top: '-150px', right: '-10%', width: '500px', height: '500px', background: 'radial-gradient(circle, rgba(16, 185, 129,0.05) 0%, rgba(255,255,255,0) 70%)', borderRadius: '50%', zIndex: 0, pointerEvents: 'none' }} />
+          <div style={{ position: 'absolute', bottom: '-150px', left: '-10%', width: '500px', height: '500px', background: 'radial-gradient(circle, rgba(20, 184, 166,0.05) 0%, rgba(255,255,255,0) 70%)', borderRadius: '50%', zIndex: 0, pointerEvents: 'none' }} />
 
           <div style={{ maxWidth: '800px', margin: '0 auto', position: 'relative', zIndex: 1 }}>
-            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: 'rgba(249, 115, 22,0.1)', color: 'var(--primary)', padding: '6px 16px', borderRadius: '30px', fontSize: '0.85rem', fontWeight: 600, marginBottom: '24px' }}>
+            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: 'rgba(16, 185, 129,0.1)', color: 'var(--primary)', padding: '6px 16px', borderRadius: '30px', fontSize: '0.85rem', fontWeight: 600, marginBottom: '24px' }}>
               <Shield size={14} /> Powered by Midnight Zero-Knowledge Technology
             </div>
             
@@ -64,7 +64,7 @@ export default function LandingPage() {
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '16px', alignItems: 'center', textAlign: 'center' }}>
               
               <div className="saas-card" style={{ padding: '30px 20px' }}>
-                <div style={{ background: 'rgba(244,63,94,0.1)', color: '#f43f5e', width: '50px', height: '50px', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px' }}>
+                <div style={{ background: 'rgba(16, 185, 129,0.1)', color: '#f97316', width: '50px', height: '50px', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px' }}>
                   <Lock size={24} />
                 </div>
                 <h3 style={{ fontSize: '1.1rem', fontWeight: 600, marginBottom: '10px' }}>Private Data</h3>
@@ -75,8 +75,8 @@ export default function LandingPage() {
                 <ArrowRight size={32} style={{ margin: '0 auto' }} />
               </div>
 
-              <div className="saas-card" style={{ padding: '30px 20px', borderColor: 'var(--primary)', boxShadow: '0 10px 30px -10px rgba(249, 115, 22,0.15)' }}>
-                <div style={{ background: 'linear-gradient(135deg, #f97316 0%, #ea580c 100%)', color: '#fff', width: '50px', height: '50px', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px', boxShadow: '0 4px 12px rgba(249, 115, 22,0.3)' }}>
+              <div className="saas-card" style={{ padding: '30px 20px', borderColor: 'var(--primary)', boxShadow: '0 10px 30px -10px rgba(16, 185, 129,0.15)' }}>
+                <div style={{ background: 'linear-gradient(135deg, #f97316 0%, #ea580c 100%)', color: '#fff', width: '50px', height: '50px', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px', boxShadow: '0 4px 12px rgba(16, 185, 129,0.3)' }}>
                   <Cpu size={24} />
                 </div>
                 <h3 style={{ fontSize: '1.1rem', fontWeight: 600, marginBottom: '10px' }}>ZK Proof</h3>
@@ -88,7 +88,7 @@ export default function LandingPage() {
               </div>
 
               <div className="saas-card" style={{ padding: '30px 20px' }}>
-                <div style={{ background: 'rgba(14,165,233,0.1)', color: '#0ea5e9', width: '50px', height: '50px', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px' }}>
+                <div style={{ background: 'rgba(20, 184, 166,0.1)', color: '#14b8a6', width: '50px', height: '50px', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px' }}>
                   <Server size={24} />
                 </div>
                 <h3 style={{ fontSize: '1.1rem', fontWeight: 600, marginBottom: '10px' }}>Verified Registry</h3>
@@ -104,19 +104,19 @@ export default function LandingPage() {
           <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '24px' }}>
               
-              <Link href="/dashboard" className="saas-card" style={{ padding: '30px', textDecoration: 'none', color: 'inherit', transition: 'transform 0.2s', display: 'block' }}>
+              <Link href="/dashboard" className="saas-card" style={{ padding: '30px', textDecoration: 'none', color: 'inherit', transition: 'transform 0.2s', display: 'block', cursor: 'pointer', position: 'relative', zIndex: 20 }}>
                 <Activity size={32} color="var(--primary)" style={{ marginBottom: '16px' }} />
                 <h3 style={{ fontSize: '1.3rem', fontWeight: 600, marginBottom: '12px' }}>Donor Dashboard</h3>
                 <p style={{ fontSize: '0.95rem', color: 'var(--text-secondary)', lineHeight: 1.5 }}>View your registration status, network configuration, and manage your private witness keys.</p>
               </Link>
 
-              <Link href="/records" className="saas-card" style={{ padding: '30px', textDecoration: 'none', color: 'inherit', transition: 'transform 0.2s', display: 'block' }}>
-                <FileCheck size={32} color="#0ea5e9" style={{ marginBottom: '16px' }} />
+              <Link href="/records" className="saas-card" style={{ padding: '30px', textDecoration: 'none', color: 'inherit', transition: 'transform 0.2s', display: 'block', cursor: 'pointer', position: 'relative', zIndex: 20 }}>
+                <FileCheck size={32} color="#14b8a6" style={{ marginBottom: '16px' }} />
                 <h3 style={{ fontSize: '1.3rem', fontWeight: 600, marginBottom: '12px' }}>Public Registry</h3>
                 <p style={{ fontSize: '0.95rem', color: 'var(--text-secondary)', lineHeight: 1.5 }}>Query the public Midnight ledger for total donor counts and anonymous blood supply metrics.</p>
               </Link>
 
-              <Link href="/privacy" className="saas-card" style={{ padding: '30px', textDecoration: 'none', color: 'inherit', transition: 'transform 0.2s', display: 'block' }}>
+              <Link href="/privacy" className="saas-card" style={{ padding: '30px', textDecoration: 'none', color: 'inherit', transition: 'transform 0.2s', display: 'block', cursor: 'pointer', position: 'relative', zIndex: 20 }}>
                 <Shield size={32} color="#8b5cf6" style={{ marginBottom: '16px' }} />
                 <h3 style={{ fontSize: '1.3rem', fontWeight: 600, marginBottom: '12px' }}>Privacy Model</h3>
                 <p style={{ fontSize: '0.95rem', color: 'var(--text-secondary)', lineHeight: 1.5 }}>Learn exactly what information is public on the blockchain versus kept private on your device.</p>
