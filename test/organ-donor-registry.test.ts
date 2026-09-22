@@ -116,18 +116,15 @@ describe('Private Organ Donor Registry Unit Tests', () => {
   });
 
   describe('5. Network and Configuration Resolution', () => {
-    it('defaults to undeployed network configuration when no flag is provided', () => {
+    it('defaults to preview network configuration when no flag is provided', () => {
       const { network } = resolveNetwork({ argv: [] });
-      expectNetworkUndeployed(network);
+      assert.equal(network, 'preview');
     });
 
     it('parses --network flag correctly', () => {
-      const parsed = parseNetworkFlag(['node', 'script.js', '--network', 'preprod']);
-      assert.equal(parsed, 'preprod');
+      const parsed = parseNetworkFlag(['node', 'script.js', '--network', 'preview']);
+      assert.equal(parsed, 'preview');
     });
   });
 });
 
-function expectNetworkUndeployed(network: string) {
-  assert.equal(network, 'undeployed');
-}
