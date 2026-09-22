@@ -35,6 +35,7 @@
     "@midnight-ntwrk/midnight-js-types": "4.1.1",
     "@midnight-ntwrk/midnight-js-utils": "4.1.1",
     "@midnight-ntwrk/wallet-sdk": "1.2.0",
+    "@next/swc-linux-x64-gnu": "^16.3.5",
     "browser-level": "^3.0.0",
     "lucide-react": "^0.468.0",
     "next": "^15.0.3",
