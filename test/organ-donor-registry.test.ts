@@ -116,9 +116,9 @@ describe('Private Organ Donor Registry Unit Tests', () => {
   });
 
   describe('5. Network and Configuration Resolution', () => {
-    it('defaults to preview network configuration when no flag is provided', () => {
-      const { network } = resolveNetwork({ argv: [] });
-      assert.equal(network, 'preview');
+    it('defaults to undeployed network configuration when no flag is provided', () => {
+      const { network } = resolveNetwork({ argv: [], cwd: '/fake/path/for/test' });
+      assert.equal(network, 'undeployed');
     });
 
     it('parses --network flag correctly', () => {
