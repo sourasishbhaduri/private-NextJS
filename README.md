@@ -3,10 +3,10 @@
 Enterprise Zero-Knowledge Organ Donor Registration & Eligibility Verification built natively on the Midnight Network using Compact smart contracts, client-side ZK-SNARK proving, dual-state ledger privacy, and Next.js 15.
 
 <p align="center">
-  <a href="https://private-organ-donor-registry-next-j.vercel.app/"><img src="https://img.shields.io/badge/Live-Demo-blue?style=for-the-badge&logo=vercel" alt="Live Demo" /></a>
-  <a href="https://www.youtube.com/watch?v=ce5IJDyWQX0"><img src="https://img.shields.io/badge/Demo-Video-red?style=for-the-badge&logo=youtube" alt="Demo Video" /></a>
+  <a href="https://private-next-hf1gk6vm5-sourasish.vercel.app/"><img src="https://img.shields.io/badge/Live-Demo-blue?style=for-the-badge&logo=vercel" alt="Live Demo" /></a>
+  <a href="https://youtu.be/9REy80xQ5IU"><img src="https://img.shields.io/badge/Demo-Video-red?style=for-the-badge&logo=youtube" alt="Demo Video" /></a>
   <a href="https://explorer.1am.xyz/contract/de11c2e51425e63b2b20faf91750245d7355715ba0af8ef6c82c065674ebe23d"><img src="https://img.shields.io/badge/Midnight-Preview_Contract-black?style=for-the-badge" alt="Midnight Preview Contract" /></a>
-  <a href="https://github.com/sourasishbhaduri/private-organ-donor-registry-NextJs/actions"><img src="https://img.shields.io/badge/CI/CD-passing-success?style=for-the-badge&logo=githubactions" alt="CI/CD" /></a>
+  <a href="https://github.com/sourasishbhaduri/private-NextJS/actions"><img src="https://img.shields.io/badge/CI/CD-passing-success?style=for-the-badge&logo=githubactions" alt="CI/CD" /></a>
   <img src="https://img.shields.io/badge/License-MIT-green?style=for-the-badge" alt="License" />
 </p>
 
@@ -113,7 +113,7 @@ Every commit and pull request is automatically validated through a comprehensive
 ### 2. Installation & Setup
 ```bash
 # Clone repository
-git clone https://github.com/sourasishbhaduri/private-organ-donor-registry-NextJs.git
+git clone https://github.com/sourasishbhaduri/private-NextJS.git
 cd private-organ-donor-registry-NextJs
 
 # Install root & workspace dependencies
