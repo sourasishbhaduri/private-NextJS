@@ -10,7 +10,7 @@ interface PublicLedgerStateProps {
   isLoading: boolean;
 }
 
-const CONTRACT_ADDR = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS || '8d65e9ea8a166da7ed15128e0bd60dfa4f8d81bac644f1a16f03cf4253cb9a51';
+const CONTRACT_ADDR = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS || 'de11c2e51425e63b2b20faf91750245d7355715ba0af8ef6c82c065674ebe23d';
 
 const BLOOD_LABELS: Record<number, { name: string; tag: string }> = {
   1: { name: 'O-', tag: 'Universal Donor' },

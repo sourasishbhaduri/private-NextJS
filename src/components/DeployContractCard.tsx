@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { useWallet } from '../contexts/WalletContext';
 import { Copy, Check, ExternalLink, ShieldCheck, AlertTriangle, Cpu } from 'lucide-react';
 
-const DEFAULT_CONTRACT_ADDRESS = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS || '8d65e9ea8a166da7ed15128e0bd60dfa4f8d81bac644f1a16f03cf4253cb9a51';
+const DEFAULT_CONTRACT_ADDRESS = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS || 'de11c2e51425e63b2b20faf91750245d7355715ba0af8ef6c82c065674ebe23d';
 
 export const DeployContractCard: React.FC = () => {
   const { wallet } = useWallet();

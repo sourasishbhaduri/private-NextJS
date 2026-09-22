@@ -5,7 +5,7 @@ Enterprise Zero-Knowledge Organ Donor Registration & Eligibility Verification bu
 <p align="center">
   <a href="https://private-organ-donor-registry-next-j.vercel.app/"><img src="https://img.shields.io/badge/Live-Demo-blue?style=for-the-badge&logo=vercel" alt="Live Demo" /></a>
   <a href="https://www.youtube.com/watch?v=ce5IJDyWQX0"><img src="https://img.shields.io/badge/Demo-Video-red?style=for-the-badge&logo=youtube" alt="Demo Video" /></a>
-  <a href="https://explorer.1am.xyz/contract/8d65e9ea8a166da7ed15128e0bd60dfa4f8d81bac644f1a16f03cf4253cb9a51"><img src="https://img.shields.io/badge/Midnight-Preview_Contract-black?style=for-the-badge" alt="Midnight Preview Contract" /></a>
+  <a href="https://explorer.1am.xyz/contract/de11c2e51425e63b2b20faf91750245d7355715ba0af8ef6c82c065674ebe23d"><img src="https://img.shields.io/badge/Midnight-Preview_Contract-black?style=for-the-badge" alt="Midnight Preview Contract" /></a>
   <a href="https://github.com/sourasishbhaduri/private-organ-donor-registry-NextJs/actions"><img src="https://img.shields.io/badge/CI/CD-passing-success?style=for-the-badge&logo=githubactions" alt="CI/CD" /></a>
   <img src="https://img.shields.io/badge/License-MIT-green?style=for-the-badge" alt="License" />
 </p>
@@ -84,7 +84,7 @@ The Registry leverages Midnight's dual-state architecture where private witness 
 
 | Parameter | Value | Explorer Link |
 |-----------|-------|---------------|
-| **Active Contract (Latest)** | `8d65e9ea8a166da7ed15128e0bd60dfa4f8d81bac644f1a16f03cf4253cb9a51` | [🔍 View on 1AM Explorer](https://explorer.1am.xyz/contract/8d65e9ea8a166da7ed15128e0bd60dfa4f8d81bac644f1a16f03cf4253cb9a51) |
+| **Active Contract (Latest)** | `de11c2e51425e63b2b20faf91750245d7355715ba0af8ef6c82c065674ebe23d` | [🔍 View on 1AM Explorer](https://explorer.1am.xyz/contract/de11c2e51425e63b2b20faf91750245d7355715ba0af8ef6c82c065674ebe23d) |
 | **Deployer Wallet** | `mn_addr_preview16fakwryq54tqphp8u2g3c3dam3mavk560yhryu57s5v0vnguz93qzegnrs` | [Preview Faucet](https://midnight-tmnight-preview.nethermind.dev/) |
 
 ## 🔄 CI/CD Pipeline & Automated Quality Gates
