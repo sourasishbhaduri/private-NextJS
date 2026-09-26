@@ -1,0 +1,6 @@
+pragma language_version >= 0.23;
+import CompactStandardLibrary;
+
+export circuit testHash(input: Bytes<32>): Bytes<32> {
+    return persistentHash<Bytes<32>>(input);
+}

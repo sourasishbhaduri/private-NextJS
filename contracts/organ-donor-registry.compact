@@ -3,7 +3,8 @@ pragma language_version >= 0.23;
 import CompactStandardLibrary;
 
 export ledger totalDonors: Counter;
-export ledger registeredCommitments: Map<Bytes<32>, Boolean>;
+// donorStatus: 0 = Unregistered, 1 = Active, 2 = Withdrawn
+export ledger donorStatus: Map<Bytes<32>, Uint<8>>;
 export ledger bloodGroupCounts: Map<Uint<8>, Uint<32>>;
 
 witness secretDonorKey(): Bytes<32>;
@@ -12,7 +13,14 @@ witness secretBloodType(): Uint<8>;
 witness secretOrganPledge(): Uint<8>;
 witness secretClearanceHash(): Bytes<32>;
 
-export circuit registerDonor(donorCommitment: Bytes<32>): Bytes<32> {
+// Helper to derive the commitment from the secret key inside the circuit
+export circuit deriveCommitment(): Bytes<32> {
+  const donorKey: Bytes<32> = secretDonorKey();
+  const hash = persistentHash<Bytes<32>>(donorKey);
+  return disclose(hash);
+}
+
+export circuit registerDonor(): Bytes<32> {
   const age: Uint<8> = secretDonorAge();
   const blood: Uint<8> = secretBloodType();
   const pledge: Uint<8> = secretOrganPledge();
@@ -24,30 +32,58 @@ export circuit registerDonor(donorCommitment: Bytes<32>): Bytes<32> {
   const emptyHash: Bytes<32> = pad(32, "");
   assert(clearance != emptyHash, "Medical clearance signature required");
 
-  const pubCommitment: Bytes<32> = disclose(donorCommitment);
-  assert(!registeredCommitments.member(pubCommitment), "Donor commitment already registered");
+  const commitment: Bytes<32> = deriveCommitment();
+  const pubCommitment: Bytes<32> = disclose(commitment);
+  
+  // Check that the donor is not already registered
+  const currentStatus: Uint<8> = donorStatus.member(pubCommitment) ? donorStatus.lookup(pubCommitment) : 0;
+  assert(currentStatus == 0, "Donor commitment already registered");
 
-  registeredCommitments.insert(pubCommitment, true);
+  donorStatus.insert(pubCommitment, 1); // 1 = Active
   totalDonors.increment(1);
 
   const discBlood: Uint<8> = disclose(blood);
-  const currentCount: Uint<32> = bloodGroupCounts.lookup(discBlood);
+  const currentCount: Uint<32> = bloodGroupCounts.member(discBlood) ? bloodGroupCounts.lookup(discBlood) : 0;
   bloodGroupCounts.insert(discBlood, (currentCount + 1) as Uint<32>);
 
   return pubCommitment;
 }
 
-export circuit verifyEligibility(expectedCommitment: Bytes<32>): Boolean {
+export circuit withdrawConsent(): Bytes<32> {
+  const commitment: Bytes<32> = deriveCommitment();
+  const pubCommitment: Bytes<32> = disclose(commitment);
+  assert(donorStatus.member(pubCommitment), "Donor not registered");
+  
+  const currentStatus: Uint<8> = donorStatus.lookup(pubCommitment);
+  assert(currentStatus == 1, "Donor is not active");
+
+  donorStatus.insert(pubCommitment, 2); // 2 = Withdrawn
+  
+  // Decrement blood group count to reflect availability
+  const blood: Uint<8> = secretBloodType();
+  const discBlood: Uint<8> = disclose(blood);
+  const currentCount: Uint<32> = bloodGroupCounts.member(discBlood) ? bloodGroupCounts.lookup(discBlood) : 0;
+  if (currentCount > 0) {
+    bloodGroupCounts.insert(discBlood, (currentCount - 1) as Uint<32>);
+  }
+
+  return pubCommitment;
+}
+
+export circuit verifyEligibility(): Bytes<32> {
   const age: Uint<8> = secretDonorAge();
   const clearance: Bytes<32> = secretClearanceHash();
-
+  const commitment: Bytes<32> = deriveCommitment();
+  
   const isAdult: Boolean = (age >= 18);
   const emptyHash: Bytes<32> = pad(32, "");
   const hasClearance: Boolean = (clearance != emptyHash);
-  const isEligible: Boolean = (isAdult && hasClearance);
+  
+  const pubCommitment: Bytes<32> = disclose(commitment);
+  const isRegistered: Boolean = donorStatus.member(pubCommitment);
+  const isActive: Boolean = isRegistered ? (donorStatus.lookup(pubCommitment) == 1) : false;
 
-  const pubCommitment: Bytes<32> = disclose(expectedCommitment);
-  const isRegistered: Boolean = registeredCommitments.member(pubCommitment);
+  assert(isAdult && hasClearance && isActive, "Donor is not eligible");
 
-  return disclose(isEligible && isRegistered);
+  return pubCommitment;
 }

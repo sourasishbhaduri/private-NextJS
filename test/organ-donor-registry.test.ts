@@ -23,13 +23,18 @@ const ORGAN_BITMASKS = {
   CORNEA: 32,
 };
 
-function computeCommitmentHash(secretId: string, age: number, bloodType: number, clearanceSeed: string): Uint8Array {
-  const hash = createHash('sha256');
-  hash.update(secretId);
-  hash.update(new Uint8Array([age]));
-  hash.update(new Uint8Array([bloodType]));
-  hash.update(clearanceSeed);
-  return new Uint8Array(hash.digest());
+// donorStatus mock (0 = Unregistered, 1 = Active, 2 = Withdrawn)
+function simulateDonorStatusTransition(currentStatus: number, action: 'register' | 'withdraw'): { newStatus: number; error?: string } {
+  if (action === 'register') {
+    if (currentStatus !== 0) return { newStatus: currentStatus, error: 'Donor commitment already registered' };
+    return { newStatus: 1 };
+  }
+  if (action === 'withdraw') {
+    if (currentStatus === 0) return { newStatus: currentStatus, error: 'Donor not registered' };
+    if (currentStatus === 2) return { newStatus: currentStatus, error: 'Donor is not active' };
+    return { newStatus: 2 };
+  }
+  return { newStatus: currentStatus, error: 'Invalid action' };
 }
 
 function checkEligibilityRules(age: number, bloodType: number, pledgeMask: number, clearanceSeed: string): { eligible: boolean; error?: string } {
@@ -85,18 +90,33 @@ describe('Private Organ Donor Registry Unit Tests', () => {
     });
   });
 
-  describe('3. ZK Commitment & Privacy Model', () => {
-    it('generates deterministic 32-byte SHA256 commitment hashes', () => {
-      const hash1 = computeCommitmentHash('donor-secret-999', 28, 1, 'HOSP-KEY-A');
-      const hash2 = computeCommitmentHash('donor-secret-999', 28, 1, 'HOSP-KEY-A');
-      assert.equal(hash1.length, 32);
-      assert.equal(Buffer.from(hash1).toString('hex'), Buffer.from(hash2).toString('hex'));
+  describe('3. Donor Status and Consent Management', () => {
+    it('allows unregistered donor to register and sets status to Active (1)', () => {
+      const res = simulateDonorStatusTransition(0, 'register');
+      assert.equal(res.newStatus, 1);
+      assert.equal(res.error, undefined);
     });
 
-    it('produces unique commitments for different donor identities', () => {
-      const hashA = computeCommitmentHash('donor-alice', 30, 2, 'HOSP-KEY-A');
-      const hashB = computeCommitmentHash('donor-bob', 30, 2, 'HOSP-KEY-A');
-      assert.notEqual(Buffer.from(hashA).toString('hex'), Buffer.from(hashB).toString('hex'));
+    it('rejects duplicate registration for already Active or Withdrawn donors', () => {
+      const resActive = simulateDonorStatusTransition(1, 'register');
+      assert.equal(resActive.error, 'Donor commitment already registered');
+      
+      const resWithdrawn = simulateDonorStatusTransition(2, 'register');
+      assert.equal(resWithdrawn.error, 'Donor commitment already registered');
+    });
+
+    it('allows Active donor to withdraw consent and sets status to Withdrawn (2)', () => {
+      const res = simulateDonorStatusTransition(1, 'withdraw');
+      assert.equal(res.newStatus, 2);
+      assert.equal(res.error, undefined);
+    });
+
+    it('rejects withdrawal if donor is Unregistered or already Withdrawn', () => {
+      const resUnregistered = simulateDonorStatusTransition(0, 'withdraw');
+      assert.equal(resUnregistered.error, 'Donor not registered');
+
+      const resAlreadyWithdrawn = simulateDonorStatusTransition(2, 'withdraw');
+      assert.equal(resAlreadyWithdrawn.error, 'Donor is not active');
     });
   });
 

@@ -1,6 +1,7 @@
 import type * as __compactRuntime from '@midnight-ntwrk/compact-runtime';
 
 export type Witnesses<PS> = {
+  secretDonorKey(context: __compactRuntime.WitnessContext<Ledger, PS>): [PS, Uint8Array];
   secretDonorAge(context: __compactRuntime.WitnessContext<Ledger, PS>): [PS, bigint];
   secretBloodType(context: __compactRuntime.WitnessContext<Ledger, PS>): [PS, bigint];
   secretOrganPledge(context: __compactRuntime.WitnessContext<Ledger, PS>): [PS, bigint];
@@ -8,37 +9,36 @@ export type Witnesses<PS> = {
 }
 
 export type ImpureCircuits<PS> = {
-  registerDonor(context: __compactRuntime.CircuitContext<PS>,
-                donorCommitment_0: Uint8Array): __compactRuntime.CircuitResults<PS, Uint8Array>;
-  verifyEligibility(context: __compactRuntime.CircuitContext<PS>,
-                    expectedCommitment_0: Uint8Array): __compactRuntime.CircuitResults<PS, boolean>;
+  deriveCommitment(context: __compactRuntime.CircuitContext<PS>): __compactRuntime.CircuitResults<PS, Uint8Array>;
+  registerDonor(context: __compactRuntime.CircuitContext<PS>): __compactRuntime.CircuitResults<PS, Uint8Array>;
+  withdrawConsent(context: __compactRuntime.CircuitContext<PS>): __compactRuntime.CircuitResults<PS, Uint8Array>;
+  verifyEligibility(context: __compactRuntime.CircuitContext<PS>): __compactRuntime.CircuitResults<PS, Uint8Array>;
 }
 
 export type ProvableCircuits<PS> = {
-  registerDonor(context: __compactRuntime.CircuitContext<PS>,
-                donorCommitment_0: Uint8Array): __compactRuntime.CircuitResults<PS, Uint8Array>;
-  verifyEligibility(context: __compactRuntime.CircuitContext<PS>,
-                    expectedCommitment_0: Uint8Array): __compactRuntime.CircuitResults<PS, boolean>;
+  registerDonor(context: __compactRuntime.CircuitContext<PS>): __compactRuntime.CircuitResults<PS, Uint8Array>;
+  withdrawConsent(context: __compactRuntime.CircuitContext<PS>): __compactRuntime.CircuitResults<PS, Uint8Array>;
+  verifyEligibility(context: __compactRuntime.CircuitContext<PS>): __compactRuntime.CircuitResults<PS, Uint8Array>;
 }
 
 export type PureCircuits = {
 }
 
 export type Circuits<PS> = {
-  registerDonor(context: __compactRuntime.CircuitContext<PS>,
-                donorCommitment_0: Uint8Array): __compactRuntime.CircuitResults<PS, Uint8Array>;
-  verifyEligibility(context: __compactRuntime.CircuitContext<PS>,
-                    expectedCommitment_0: Uint8Array): __compactRuntime.CircuitResults<PS, boolean>;
+  deriveCommitment(context: __compactRuntime.CircuitContext<PS>): __compactRuntime.CircuitResults<PS, Uint8Array>;
+  registerDonor(context: __compactRuntime.CircuitContext<PS>): __compactRuntime.CircuitResults<PS, Uint8Array>;
+  withdrawConsent(context: __compactRuntime.CircuitContext<PS>): __compactRuntime.CircuitResults<PS, Uint8Array>;
+  verifyEligibility(context: __compactRuntime.CircuitContext<PS>): __compactRuntime.CircuitResults<PS, Uint8Array>;
 }
 
 export type Ledger = {
   readonly totalDonors: bigint;
-  registeredCommitments: {
+  donorStatus: {
     isEmpty(): boolean;
     size(): bigint;
     member(key_0: Uint8Array): boolean;
-    lookup(key_0: Uint8Array): boolean;
-    [Symbol.iterator](): Iterator<[Uint8Array, boolean]>
+    lookup(key_0: Uint8Array): bigint;
+    [Symbol.iterator](): Iterator<[Uint8Array, bigint]>
   };
   bloodGroupCounts: {
     isEmpty(): boolean;

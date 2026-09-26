@@ -1,0 +1,8 @@
+{
+  "version": 3,
+  "file": "index.js",
+  "sourceRoot": "../../",
+  "sources": ["test_hash.compact", "compiler/standard-library.compact"],
+  "names": [],
+  "mappings": ";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;EAAA;;;;;;;;;;MAGA,AAAA,QAEC;;OAAA;;;;GACA;EAND;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;GAMC;ECND,AAAA,kBAAA;oEAAA;;;EDGA,AAAA,WAEC,CAFuB,OAAgB,kCACH,OAAK,IACzC;;;;;;;;;;;;;;;;;;;;;;;EAFD,AAAA,QAEC;;;;UAFuB,OAAgB;;;;;;;;sCAAhB,OAAgB;GAEvC;;;;"
+}

@@ -30,7 +30,13 @@ Traditional organ donor registries require individuals to share highly sensitive
 The Private Organ Donor Registry enables individuals to mathematically prove their eligibility and donation consent in Zero-Knowledge.
 - No medical records or exact birth dates ever leave the donor's local device.
 - No wallet identities or personal identifiable information (PII) are published on-chain.
-- The Midnight ledger verifies the cryptographic proof, increments the aggregate donor supply counter, and records a one-way commitment hash.
+- The Midnight ledger verifies the cryptographic proof, tracks the donor's consent status (Active/Withdrawn), increments the aggregate donor supply counter, and records a one-way commitment hash.
+
+**New Contract Improvements (Latest Revision)**:
+- **Ledger-backed Consent Status**: Migrated from simple existence checks to a structured `donorStatus` ledger (`Unregistered`, `Active`, `Withdrawn`), enabling verifiable state transitions.
+- **Enhanced ZK Authorization**: `persistentHash` securely derives commitments inside the ZK circuit natively, eliminating the need to pass them explicitly and preventing spoofing.
+- **Consent Revocation (`withdrawConsent`)**: Donors can now cryptographically withdraw their pledge while maintaining privacy.
+- **Streamlined Verification (`verifyEligibility`)**: Directly checks for `Active` status on-chain, requiring zero arguments.
 
 ## ⚙️ Working Principles & Cryptographic Flow
 
@@ -59,7 +65,7 @@ The Registry leverages Midnight's dual-state architecture where private witness 
 │                                                                             │
 │  PUBLIC ON-CHAIN STATE:                                                     │
 │  ✅ totalDonors         — Aggregate counter incremented (+1)                │
-│  ✅ lastCommitment      — One-way cryptographic fingerprint (SHA-256)       │
+│  ✅ donorStatus         — Map of commitment -> Active/Withdrawn/Unregistered│
 │  ✅ bloodSupplyCounts   — Anonymized aggregate metrics                      │
 │                                                                             │
 │  PROTECTED PRIVATE STATE (Never exposed or stored on-chain):                │
@@ -80,12 +86,14 @@ The Registry leverages Midnight's dual-state architecture where private witness 
 | **Commitment Hash** | 🌐 Public | Midnight Ledger | One-way cryptographic fingerprint (`0x...`) |
 | **Verifier Portal** | 🌐 Public | Midnight Ledger | Accessible by authorized hospital staff |
 
-## 🔗 Deployed Contracts — Midnight Preview
+## 🔗 Deployed Contracts
 
-| Parameter | Value | Explorer Link |
-|-----------|-------|---------------|
-| **Active Contract (Latest)** | `de11c2e51425e63b2b20faf91750245d7355715ba0af8ef6c82c065674ebe23d` | [🔍 View on 1AM Explorer](https://explorer.1am.xyz/contract/de11c2e51425e63b2b20faf91750245d7355715ba0af8ef6c82c065674ebe23d) |
-| **Deployer Wallet** | `mn_addr_preview16fakwryq54tqphp8u2g3c3dam3mavk560yhryu57s5v0vnguz93qzegnrs` | [Preview Faucet](https://midnight-tmnight-preview.nethermind.dev/) |
+| Network | Contract Address / ID | Explorer Link | Notes |
+|---------|-----------------------|---------------|-------|
+| **Local Devnet** | *Pending Network Sync* | N/A | Deployment attempted; waiting on local indexer sync stability. |
+| **Preview (Historical)** | `de11c2e51425e63b2b20faf91750245d7355715ba0af8ef6c82c065674ebe23d` | [🔍 View on 1AM Explorer](https://explorer.1am.xyz/contract/de11c2e51425e63b2b20faf91750245d7355715ba0af8ef6c82c065674ebe23d) | Previous version prior to `donorStatus` mapping. |
+
+> **Deployment Note:** Due to continuous websocket disconnects (`1000: Normal Closure`) on the public Midnight Preview network and `Wallet.Sync / Internal Server Error` on the local docker compose indexer, a new deployment address for the revised contract could not be generated during this session. The codebase is fully prepared for deployment once the network stabilizes.
 
 ## 🔄 CI/CD Pipeline & Automated Quality Gates
 

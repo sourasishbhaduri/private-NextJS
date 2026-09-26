@@ -78,14 +78,7 @@ const BLOOD_NAMES: Record<number, string> = {
   8: 'AB+ (Universal Recipient)',
 };
 
-function computeCommitmentHash(secretId: string, age: number, bloodType: number, clearanceSeed: string): Uint8Array {
-  const hash = createHash('sha256');
-  hash.update(secretId);
-  hash.update(new Uint8Array([age]));
-  hash.update(new Uint8Array([bloodType]));
-  hash.update(clearanceSeed);
-  return new Uint8Array(hash.digest());
-}
+// Removed computeCommitmentHash, ZK circuit computes it natively using persistentHash
 
 async function createProviders(walletCtx: WalletContext) {
   const privateStatePassword = process.env.PRIVATE_STATE_PASSWORD?.trim() || 'Local-Devnet-Development-Placeholder-1';
@@ -195,15 +188,11 @@ async function main() {
 
           const secretKeyBytes = new Uint8Array(createHash('sha256').update(secretId).digest());
           const clearanceBytes = new Uint8Array(createHash('sha256').update(clearanceSeed).digest());
-          const commitmentHash = computeCommitmentHash(secretId, age, bloodType, clearanceSeed);
 
           console.log('\n  🔒 Private Witness Data (NOT exposed to blockchain):');
           console.log(`     Secret Identity: [PROTECTED BY ZK PROOF]`);
           console.log(`     Exact Age:       ${age} (Only proving >= 18)`);
           console.log(`     Blood Code:      ${bloodType} (${BLOOD_NAMES[bloodType] || 'Unknown'})`);
-          console.log('\n  🌐 Public Ledger Disclosure:');
-          console.log(`     Public Commitment: 0x${Buffer.from(commitmentHash).toString('hex')}`);
-
           console.log('\n  Generating ZK Proof & submitting transaction (30-60s)...');
           try {
             // Update private state witnesses before calling circuit
@@ -215,11 +204,11 @@ async function main() {
               secretClearanceHash: clearanceBytes,
             });
 
-            const tx = await deployed.callTx.registerDonor(commitmentHash);
+            const tx = await deployed.callTx.registerDonor();
             console.log(`\n  ✅ Registration Successful!`);
             console.log(`  Transaction ID: ${tx.public.txId}`);
             console.log(`  Block Height:   ${tx.public.blockHeight}`);
-            console.log(`  Disclosed Commitment: 0x${Buffer.from(tx.public.result || commitmentHash).toString('hex')}\n`);
+            console.log(`  Disclosed Commitment: 0x${Buffer.from(tx.public.result).toString('hex')}\n`);
           } catch (err: any) {
             console.error('\n  ❌ Registration Failed:', err?.message || err);
           }
@@ -259,9 +248,8 @@ async function main() {
 
           const secretKeyBytes = new Uint8Array(createHash('sha256').update(secretId).digest());
           const clearanceBytes = new Uint8Array(createHash('sha256').update(clearanceSeed).digest());
-          const commitmentHash = computeCommitmentHash(secretId, age, bloodType, clearanceSeed);
 
-          console.log('\n  Verifying ZK proof for commitment 0x' + Buffer.from(commitmentHash).toString('hex') + '...');
+          console.log('\n  Verifying ZK proof for private eligibility...');
           try {
             await providers.privateStateProvider.set(PRIVATE_STATE_ID, {
               secretDonorKey: secretKeyBytes,
@@ -271,8 +259,8 @@ async function main() {
               secretClearanceHash: clearanceBytes,
             });
 
-            const tx = await deployed.callTx.verifyEligibility(commitmentHash);
-            console.log(`\n  ✅ Verification Result: ${tx.public.result ? 'ELIGIBLE & REGISTERED' : 'INELIGIBLE / UNREGISTERED'}\n`);
+            const tx = await deployed.callTx.verifyEligibility();
+            console.log(`\n  ✅ Verification Result: ELIGIBLE & REGISTERED (Commitment: 0x${Buffer.from(tx.public.result).toString('hex')})\n`);
           } catch (err: any) {
             console.error('\n  ❌ Verification error:', err?.message || err);
           }

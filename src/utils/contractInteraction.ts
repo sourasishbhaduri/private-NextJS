@@ -13,7 +13,8 @@ const INDEXER_URL = 'https://indexer.preview.midnight.network/api/v4/graphql';
 const INDEXER_WS = 'wss://indexer.preview.midnight.network/api/v4/graphql/ws';
 const NETWORK_ID = 'preview';
 
-// Derive a SHA-256 commitment from donor data using browser crypto
+// The commitment is now derived completely in ZK using the secret passphrase inside the contract.
+// We just derive a temporary dummy commitment for the UI if needed, but it's not passed to the contract.
 async function deriveCommitment(data: DonorFormData, walletAddress: string): Promise<string> {
   const enc = new TextEncoder();
   const payload = enc.encode(
@@ -85,8 +86,8 @@ export async function registerDonorOnChain(
     // Now we use it to trigger a signing request.
     
     // Encode the donation registration payload
+    // The ZK circuit computes the true commitment from the secret inputs natively.
     const registrationPayload = {
-      commitment: `0x${commitment}`,
       bloodTypeIndex: data.bloodType,
       organPledgeMask: data.organPledgeBitmask,
       network: NETWORK_ID,
